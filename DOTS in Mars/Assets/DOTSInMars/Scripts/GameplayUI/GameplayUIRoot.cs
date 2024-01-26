@@ -1,6 +1,9 @@
+using DOTSInMars.Buildings;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +14,7 @@ namespace DOTSInMars.UI
     {
         [SerializeField] private BuildingButton _firstButton;
 
+        private int _x = 1;
 
         private void Start()
         {
@@ -19,8 +23,13 @@ namespace DOTSInMars.UI
 
         private void OnFirstButtonClick()
         {
-            var prefab = _firstButton.BuildingPrefab;
-            GameObject.Instantiate(prefab);
+            var spawner = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<BuildingSpawnerSystem>();
+
+            spawner.RegisterMinerForAdding(new float3 {
+                x = _x++,
+                y = 0.5f,
+                z = 0
+            });
         }
     }
 
