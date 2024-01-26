@@ -1,6 +1,6 @@
 using Unity.Mathematics;
 
-public static class GridUtils
+public static class WorldGridUtils
 {
     public static int3 ToGridPosition(in float3 position)
     {

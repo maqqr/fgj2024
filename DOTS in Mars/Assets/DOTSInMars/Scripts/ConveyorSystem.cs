@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Rendering;
 using Unity.Transforms;
 
 public struct ConveyedItem : IComponentData, IEnableableComponent
@@ -24,21 +25,21 @@ public partial class ConveyorSystem : SystemBase
         }).WithAll<Item>().Run();
 
         Entities.ForEach((Entity entity, in LocalTransform localTransform) => {
-            conveyors.Add(GridUtils.ToGridPosition(localTransform.Position), entity);
+            conveyors.Add(WorldGridUtils.ToGridPosition(localTransform.Position), entity);
         }).WithAll<Conveyor>().Run();
 
         // Update conveyor progress and item positions
         Entities.ForEach((ref ConveyedItem conveyedItem, ref LocalTransform localTransform) => {
             conveyedItem.Progress = math.min(1.0f, conveyedItem.Progress + SystemAPI.Time.DeltaTime);
 
-            float3 movement = GridUtils.FromGridPosition(conveyedItem.TargetPosition - conveyedItem.StartPosition) * conveyedItem.Progress;
-            localTransform.Position = new float3(0.5f, 0.4f, 0.5f) + GridUtils.FromGridPosition(conveyedItem.StartPosition) + movement;
+            float3 movement = WorldGridUtils.FromGridPosition(conveyedItem.TargetPosition - conveyedItem.StartPosition) * conveyedItem.Progress;
+            localTransform.Position = new float3(0.5f, 0.4f, 0.5f) + WorldGridUtils.FromGridPosition(conveyedItem.StartPosition) + movement;
         }).Run();
 
         // Put items on conveyors if possible
         EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
         Entities.ForEach((Entity entity, in LocalTransform localTransform) => {
-            int3 gridPosition = GridUtils.ToGridPosition(localTransform.Position);
+            int3 gridPosition = WorldGridUtils.ToGridPosition(localTransform.Position);
             Entity conveyorEntity;
  
             if (conveyors.TryGetValue(gridPosition, out conveyorEntity))
@@ -60,8 +61,8 @@ public partial class ConveyorSystem : SystemBase
                 {
                     LocalTransform conveyorTransform = SystemAPI.GetComponent<LocalTransform>(conveyorEntity);
 
-                    int3 conveyorGridPosition = GridUtils.ToGridPosition(conveyorTransform.Position);
-                    int3 conveyorTargetGridPosition = GridUtils.ToGridPosition(conveyorTransform.Position + conveyorTransform.TransformDirection(new float3(1, 0, 0)));
+                    int3 conveyorGridPosition = WorldGridUtils.ToGridPosition(conveyorTransform.Position);
+                    int3 conveyorTargetGridPosition = WorldGridUtils.ToGridPosition(conveyorTransform.Position + conveyorTransform.TransformDirection(new float3(1, 0, 0)));
 
                     if (!conveyedItems.TryGetValue(conveyorTargetGridPosition, out Entity anotherItem))
                     {
