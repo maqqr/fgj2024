@@ -88,6 +88,7 @@ namespace InMars
                 // Write back to chunk data
                 {
                     chunkLocalTransformData[i] = localTransform;
+                    chunkCentralComplexData[i] = centralComplex;
                 }
             }
         }
