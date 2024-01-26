@@ -15,5 +15,7 @@ public class ItemBaker : Baker<ItemAuthoring>
     {
         Entity entity = GetEntity(TransformUsageFlags.Dynamic);
         AddComponent(entity, new Item());
+        AddComponent(entity, new ConveyedItem());
+        SetComponentEnabled<ConveyedItem>(entity, false);
     }
 }
