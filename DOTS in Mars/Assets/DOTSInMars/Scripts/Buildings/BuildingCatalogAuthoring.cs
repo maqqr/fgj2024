@@ -21,7 +21,7 @@ namespace DOTSInMars.Buildings
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
                 AddComponent(entity, new BuildingCatalog
                 {
-                    Miner = GetEntity(authoring.Miner, TransformUsageFlags.Dynamic)
+                    Miner = GetEntity(authoring.Miner, TransformUsageFlags.None)
                 });
             }
         }
