@@ -4,6 +4,8 @@ using UnityEngine;
 using Unity.Entities;
 using Unity.Collections;
 using Unity.Transforms;
+using Unity.Rendering;
+using Unity.Mathematics;
 
 public partial struct WorldGridSystem : ISystem
 {
@@ -35,6 +37,17 @@ public partial struct WorldGridSystem : ISystem
                     cell.ValueRW.Coordinates = new Vector3Int(x, 0, z);
                     var transform = SystemAPI.GetComponentRW<LocalTransform>(entity);
                     transform.ValueRW.Position = new Vector3(x, 0, z);
+                    //var renderMesh = SystemAPI.GetComponentRW<RenderMeshArray>(entity);
+                    
+                    state.EntityManager.AddComponent<URPMaterialPropertyBaseColor>(entity);
+                    var entityColor = SystemAPI.GetComponentRW<URPMaterialPropertyBaseColor>(entity);
+                    bool isEvenTile = (x + z) % 2 == 0;
+                    float tintValue = isEvenTile ? 1.0f : 0.7f;
+                    entityColor.ValueRW.Value = new float4(
+                        0.7264151f * tintValue,
+                        0.5234901f * tintValue,
+                        0.4008988f * tintValue,
+                        1.0f);
                 }
             }
             initialized = true;
