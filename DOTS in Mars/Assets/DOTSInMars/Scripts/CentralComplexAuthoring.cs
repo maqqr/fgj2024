@@ -17,7 +17,10 @@ namespace DOTSInMars
             public override void Bake(CentralComplexAuthoring authoring)
             {
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
-                AddComponent(entity, new CentralComplex());
+                AddComponent(entity, new CentralComplex
+                {
+                    Direction = 1
+                });
             }
         }
     }

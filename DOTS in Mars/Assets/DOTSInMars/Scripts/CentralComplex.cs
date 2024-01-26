@@ -9,5 +9,6 @@ namespace DOTSInMars
 {
     public struct CentralComplex : IComponentData
     {
+        public int Direction;
     }
 }
