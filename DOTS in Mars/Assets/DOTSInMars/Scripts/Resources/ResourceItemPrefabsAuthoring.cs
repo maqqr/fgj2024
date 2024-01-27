@@ -4,53 +4,42 @@ using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
-readonly partial struct ResourceItemPrefabsAspect : IAspect
+namespace DOTSInMars
 {
-    private readonly RefRW<ResourceItemPrefabs> resourceItemPrefabs;
-
-    public Entity GetPrefab(ResourceType resourceType)
+    public static class ResourceItemPrefab
     {
-        //return resourceItemPrefabs.ValueRO.ItemPrefabs.ElementAt((int)resourceType);
-        switch (resourceType)
+        public static Entity Get(in DynamicBuffer<ResourceItemPrefabElement> buffer, ResourceType resourceType)
         {
-            case ResourceType.Bronze: return resourceItemPrefabs.ValueRO.BronzeItemPrefab;
-            case ResourceType.Iron: return resourceItemPrefabs.ValueRO.IronItemPrefab;
+            return buffer[(int)resourceType].Value;
         }
-        return Entity.Null;
     }
-}
 
-[InternalBufferCapacity(16)]
-public struct ResourceItemPrefabElement : IBufferElementData
-{
-    public Entity Value;
-}
-
-public struct ResourceItemPrefabs : IComponentData
-{
-    //public FixedList64Bytes<Entity> ItemPrefabs;
-
-    public Entity BronzeItemPrefab;
-    public Entity IronItemPrefab;
-}
-
-public class ResourceItemPrefabsAuthoring : MonoBehaviour
-{
-    public List<GameObject> ResourceItemPrefabList;
-}
-
-public class ResourceItemPrefabsBaker : Baker<ResourceItemPrefabsAuthoring>
-{
-    public override void Bake(ResourceItemPrefabsAuthoring authoring)
+    [InternalBufferCapacity(16)]
+    public struct ResourceItemPrefabElement : IBufferElementData
     {
-        Entity entity = GetEntity(TransformUsageFlags.Dynamic);
-        var data = new ResourceItemPrefabs();
-        data.BronzeItemPrefab = GetEntity(authoring.ResourceItemPrefabList[0], TransformUsageFlags.None);
-        data.IronItemPrefab = GetEntity(authoring.ResourceItemPrefabList[1], TransformUsageFlags.None);
-        // foreach (GameObject gameObject in authoring.ResourceItemPrefabList)
-        // {
-        //     data.ItemPrefabs.Add(GetEntity(gameObject, TransformUsageFlags.None));
-        // }
-        AddComponent(entity, data);
+        public Entity Value;
+    }
+
+    public struct ResourceItemPrefabSingleton : IComponentData
+    {
+    }
+
+    public class ResourceItemPrefabsAuthoring : MonoBehaviour
+    {
+        public List<GameObject> ResourceItemPrefabList;
+    }
+
+    public class ResourceItemPrefabsBaker : Baker<ResourceItemPrefabsAuthoring>
+    {
+        public override void Bake(ResourceItemPrefabsAuthoring authoring)
+        {
+            Entity entity = GetEntity(TransformUsageFlags.Dynamic);
+            AddComponent<ResourceItemPrefabSingleton>(entity);
+            DynamicBuffer<ResourceItemPrefabElement> buffer = AddBuffer<ResourceItemPrefabElement>(entity);
+            foreach (GameObject gameObject in authoring.ResourceItemPrefabList)
+            {
+                buffer.Add(new ResourceItemPrefabElement { Value = GetEntity(gameObject, TransformUsageFlags.None) });
+            }
+        }
     }
 }

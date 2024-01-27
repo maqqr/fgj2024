@@ -14,14 +14,16 @@ namespace DOTSInMars
 
         protected override void OnUpdate()
         {
-            Entity singleton = SystemAPI.GetSingletonEntity<ResourceItemPrefabs>();
-            ResourceItemPrefabsAspect resourceItemPrefabs = SystemAPI.GetAspect<ResourceItemPrefabsAspect>(singleton);
+            Entity singleton = SystemAPI.GetSingletonEntity<ResourceItemPrefabSingleton>();
 
             if (SystemAPI.Time.ElapsedTime > lastSpawnTime + 3.0)
             {
                 lastSpawnTime = SystemAPI.Time.ElapsedTime;
 
-                var itemEntity = EntityManager.Instantiate(resourceItemPrefabs.GetPrefab(Resources.ResourceType.Iron));
+                DynamicBuffer<ResourceItemPrefabElement> buffer = SystemAPI.GetBuffer<ResourceItemPrefabElement>(singleton);
+                Entity prefabEntity = ResourceItemPrefab.Get(buffer, Resources.ResourceType.Bronze);
+
+                var itemEntity = EntityManager.Instantiate(prefabEntity);
                 RefRW<LocalTransform> localTransform = SystemAPI.GetComponentRW<LocalTransform>(itemEntity);
                 localTransform.ValueRW.Position = new float3(2.5f, 0.0f, 2.5f);
             }
