@@ -20,7 +20,7 @@ namespace DOTSInMars.Buildings
                 {
                     Type = BuildingType.Miner,
                     Recipe = 0,
-                    OutputOffset = new float3(1.0f, 0.0f, 0.0f),
+                    OutputOffset = new float3(2.0f, 0.0f, 1.0f),
                 };
                 AddComponent(entity, building);
                 AddComponent(entity, new BuildingProduction());
