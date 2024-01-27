@@ -14,17 +14,39 @@ namespace DOTSInMars.UI
     {
         [SerializeField] private BuildingButton _firstButton;
 
+        private BuildingSpawnerSystem _spawner;
+        private BuildingButton _selectedButton;
+
         private void Start()
         {
-            _firstButton.Button.onClick.AddListener(OnFirstButtonClick);
+            StartCoroutine(DelayedStart());
         }
 
+        private IEnumerator DelayedStart()
+        {
+            _firstButton.Button.onClick.AddListener(OnFirstButtonClick);
+            yield return new WaitForSeconds(0.5f);
+            _spawner = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<BuildingSpawnerSystem>();
+            _spawner.BuildingSet += ResetBuildingPlacement;
+        }
+
+        private void ResetBuildingPlacement()
+        {
+            if (_selectedButton != null)
+            {
+                _selectedButton.Dehighlight();
+
+            }
+            _selectedButton = null;
+        }
 
         private void OnFirstButtonClick()
         {
-            var spawner = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<BuildingSpawnerSystem>();
+            if (_spawner == null) return;
 
-            spawner.RegisterRaycasting();
+            _selectedButton = _firstButton;
+            _selectedButton.Highlight();
+            _spawner.RegisterRaycasting();
         }
     }
 

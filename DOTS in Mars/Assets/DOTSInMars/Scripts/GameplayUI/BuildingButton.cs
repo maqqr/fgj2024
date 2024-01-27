@@ -12,6 +12,16 @@ namespace DOTSInMars.UI
     internal class BuildingButton : MonoBehaviour
     {
         public Button Button;
-        public GameObject BuildingPrefab;
+        public GameObject HighlightObject;
+
+        internal void Dehighlight()
+        {
+            HighlightObject.SetActive(false);
+        }
+
+        internal void Highlight()
+        {
+            HighlightObject.SetActive(true);
+        }
     }
 }
