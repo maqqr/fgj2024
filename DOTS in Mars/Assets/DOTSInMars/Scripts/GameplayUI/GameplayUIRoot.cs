@@ -22,11 +22,13 @@ namespace DOTSInMars.UI
         [SerializeField] private BuildingButton _conveyorButton;
         [SerializeField] private GameObject _parentForDisplay;
         [SerializeField] private TextMeshProUGUI _displayText;
+        [SerializeField] private TextMeshProUGUI _scoreText;
         [SerializeField] private NarratorBehaviour _narrator;
 
         private BuildingSystem _buildingSystem;
         private BuildingSpawnerSystem _spawner;
         private BuildingButton _selectedButton;
+        private int _points = 0;
 
         private void Start()
         {
@@ -135,10 +137,8 @@ namespace DOTSInMars.UI
 
         private void DepositedFinalItem()
         {
-            // TODO: increase player score and display it
-            UnityEngine.Debug.Log("Player got one point for producing the final item");
-
-
+            _points++;
+            _scoreText.text = _points.ToString();
 
             HandleNarration(NarrationType.DepositedValuableItems, 2.5f);
         }
