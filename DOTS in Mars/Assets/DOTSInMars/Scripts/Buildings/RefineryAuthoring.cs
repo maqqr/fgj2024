@@ -20,9 +20,9 @@ namespace DOTSInMars.Buildings
                 {
                     Type = BuildingType.Refinery,
                     Recipe = 1,
-                    OutputOffset = new float3(3.0f, 0.0f, 0.0f),
+                    OutputOffset = new float3(2.0f, 0.0f, 0.0f),
                 };
-                building.InputOffsets.Add(new float3(-3.0f, 0.0f, 0.0f));
+                building.InputOffsets.Add(new float3(-2.0f, 0.0f, 0.0f));
                 AddComponent(entity, building);
                 AddComponent(entity, new BuildingProduction());
                 SetComponentEnabled<BuildingProduction>(entity, false);

@@ -6,11 +6,12 @@ namespace DOTSInMars
 {
     public struct ResourceItem : IComponentData
     {
-        ResourceType Value;
+        public ResourceType Value;
     }
 
     public class ResourceItemAuthoring : MonoBehaviour
     {
+        public ResourceType ResourceType;
     }
 
     public class ResourceItemBaker : Baker<ResourceItemAuthoring>
@@ -18,7 +19,7 @@ namespace DOTSInMars
         public override void Bake(ResourceItemAuthoring authoring)
         {
             Entity entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponent(entity, new ResourceItem());
+            AddComponent(entity, new ResourceItem { Value = authoring.ResourceType });
             AddComponent(entity, new ConveyedItem());
             SetComponentEnabled<ConveyedItem>(entity, false);
         }

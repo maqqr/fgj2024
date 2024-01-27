@@ -15,8 +15,15 @@ namespace DOTSInMars
         {
             Entity singleton = SystemAPI.GetSingletonEntity<ResourceItemPrefabSingleton>();
 
+            var items = new NativeHashMap<int3, Entity>(100, Allocator.Temp);
+
+            Entities.ForEach((Entity entity, in LocalTransform localTransform) => {
+                items.Add(WorldGridUtils.ToGridPosition(localTransform.Position), entity);
+            }).WithAll<ResourceItem>().Run();
+
             // TODO eat items nearby
 
+            // Start item production
             Entities.ForEach((Entity entity, ref Building building, in LocalTransform localTransform) => {
                 Recipe recipe = Recipes.Get(building.Recipe);
 
@@ -36,21 +43,29 @@ namespace DOTSInMars
                     EntityManager.SetComponentEnabled<BuildingProduction>(entity, true);
                     EntityManager.SetComponentData(entity, new BuildingProduction { ProductionEndTime = SystemAPI.Time.ElapsedTime + recipe.Duration });
                 }
-            }).WithNone<BuildingProduction, BuildingPreviewTag>().WithoutBurst().Run();
+            }).WithNone<BuildingPreviewTag>().WithDisabled<BuildingProduction>().WithoutBurst().Run();
 
-            Entities.ForEach((ref BuildingProduction buildingProduction, ref Building building, in LocalTransform localTransform) => {
+            // Finish production and spawn item
+            Entities.ForEach((Entity entity, ref BuildingProduction buildingProduction, ref Building building, in LocalTransform localTransform) => {
                 Recipe recipe = Recipes.Get(building.Recipe);
-                if (buildingProduction.ProductionEndTime >= SystemAPI.Time.ElapsedTime)
+                if (SystemAPI.Time.ElapsedTime >= buildingProduction.ProductionEndTime)
                 {
-                    // Spawn item
-                    DynamicBuffer<ResourceItemPrefabElement> buffer = SystemAPI.GetBuffer<ResourceItemPrefabElement>(singleton);
-                    Entity prefabEntity = ResourceItemPrefab.Get(buffer, Resources.ResourceType.Bronze);
-                    var itemEntity = EntityManager.Instantiate(prefabEntity);
-                    LocalTransform itemLocalTransform = EntityManager.GetComponentData<LocalTransform>(itemEntity);
-                    itemLocalTransform.Position = localTransform.Position + localTransform.TransformDirection(building.OutputOffset);
-                    EntityManager.SetComponentData(itemEntity, itemLocalTransform);
+                    float3 targetPosition = localTransform.Position + localTransform.TransformDirection(building.OutputOffset);
+                    int3 targetGridPosition = WorldGridUtils.ToGridPosition(targetPosition);
+                    if (!items.TryGetValue(targetGridPosition, out Entity blockingItem))
+                    {
+                        // Spawn item
+                        DynamicBuffer<ResourceItemPrefabElement> buffer = SystemAPI.GetBuffer<ResourceItemPrefabElement>(singleton);
+                        Entity prefabEntity = ResourceItemPrefab.Get(buffer, recipe.Output);
+                        var itemEntity = EntityManager.Instantiate(prefabEntity);
+                        LocalTransform itemLocalTransform = EntityManager.GetComponentData<LocalTransform>(itemEntity);
+                        itemLocalTransform.Position = targetPosition;
+                        EntityManager.SetComponentData(itemEntity, itemLocalTransform);
+
+                        EntityManager.SetComponentEnabled<BuildingProduction>(entity, false);
+                    }
                 }
-            }).WithNone<BuildingPreviewTag>().WithStructuralChanges().WithoutBurst().Run();
+            }).WithAll<BuildingProduction>().WithNone<BuildingPreviewTag>().WithStructuralChanges().WithoutBurst().Run();
         }
     }
 }

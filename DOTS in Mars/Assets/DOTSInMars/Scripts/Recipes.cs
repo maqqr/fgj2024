@@ -28,9 +28,9 @@ namespace DOTSInMars
     {
         private static readonly List<Recipe> recipes = new()
         {
-            new() { Duration = 1.0f, Inputs = new ResourceWithAmount[] {}, Output = ResourceType.Bronze },
-            new() { Duration = 2.0f, Inputs = new ResourceWithAmount[] { new(ResourceType.Bronze, 3) }, Output = ResourceType.Iron },
-            new() { Duration = 3.0f, Inputs = new ResourceWithAmount[] { new(ResourceType.Iron, 3) }, Output = ResourceType.Giggels },
+            new() { Duration = 0.5f, Inputs = new ResourceWithAmount[] {}, Output = ResourceType.CopperOre },
+            new() { Duration = 2.0f, Inputs = new ResourceWithAmount[] { new(ResourceType.CopperOre, 3) }, Output = ResourceType.CopperBar },
+            new() { Duration = 3.0f, Inputs = new ResourceWithAmount[] { new(ResourceType.CopperBar, 3) }, Output = ResourceType.Giggels },
         };
 
         public static Recipe Get(int index)

@@ -8,8 +8,8 @@ namespace DOTSInMars.Resources
 {
     public enum ResourceType
     {
-        Bronze,
-        Iron,
+        CopperOre,
+        CopperBar,
         Giggels
     }
 }
