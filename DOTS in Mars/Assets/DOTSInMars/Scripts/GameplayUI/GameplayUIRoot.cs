@@ -8,6 +8,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace DOTSInMars.UI
 {
@@ -19,6 +20,7 @@ namespace DOTSInMars.UI
         [SerializeField] private BuildingButton _refineryButton;
         [SerializeField] private BuildingButton _manufacturerButton;
         [SerializeField] private BuildingButton _conveyorButton;
+        [SerializeField] private GameObject _parentForDisplay;
         [SerializeField] private TextMeshProUGUI _displayText;
         [SerializeField] private NarratorBehaviour _narrator;
 
@@ -28,6 +30,7 @@ namespace DOTSInMars.UI
 
         private void Start()
         {
+            _parentForDisplay.SetActive(false);
             StartCoroutine(DelayedStart());
         }
 
@@ -40,7 +43,7 @@ namespace DOTSInMars.UI
             _conveyorButton.Button.onClick.AddListener(OnConveyorButtonClick);
             yield return new WaitForSeconds(0.5f);
             _spawner = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<BuildingSpawnerSystem>();
-            _spawner.BuildingSet += ResetBuildingPlacement;
+            _spawner.BuildingSet += BuildingPlaced;
             _buildingSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<BuildingSystem>();
             _buildingSystem.DepositedFinalItem += DepositedFinalItem;
         }
@@ -102,7 +105,7 @@ namespace DOTSInMars.UI
             _selectedButton.Highlight();
             _spawner.RegisterRaycasting(BuildingType.Miner);
         }
-        private void ResetBuildingPlacement()
+        private void BuildingPlaced(BuildingType type)
         {
             if (_selectedButton != null)
             {
@@ -110,18 +113,42 @@ namespace DOTSInMars.UI
 
             }
             _selectedButton = null;
+
+            var narration = type switch
+            {
+                BuildingType.Manufacturer => NarrationType.ManufacturerDone,
+                _ => NarrationType.IdleChatter,
+            };
+            HandleSentenceShowing(narration);
         }
 
         private void DepositedFinalItem()
         {
             // TODO: increase player score and display it
             UnityEngine.Debug.Log("Player got one point for producing the final item");
+
+
+
+            HandleSentenceShowing(NarrationType.DepositedValuableItems, 2.5f);
         }
 
-        private void HandleSentenceShowing(string text)
+        private void HandleSentenceShowing(NarrationType narration, float duration = 2.5f)
         {
-            _displayText.text = text;
-            _narrator.Announce(text);
+            StartCoroutine(StartAnnouncements(narration, duration));
+        }
+
+
+        private IEnumerator StartAnnouncements(NarrationType narration, float duration)
+        {
+            _parentForDisplay.gameObject.SetActive(true);
+            var narrationFound = _narrator.GetNarration(narration);
+            if (narrationFound != null)
+            {
+                _displayText.text = narrationFound.Text;
+                _narrator.Announce(narrationFound.AudioClip);
+                yield return new WaitForSeconds(duration);
+                _parentForDisplay.gameObject.SetActive(false);
+            }
         }
     }
 

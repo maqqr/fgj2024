@@ -38,7 +38,7 @@ namespace DOTSInMars.Buildings
         private bool _onclick;
         private bool _placeable;
 
-        public event Action BuildingSet;
+        public event Action<BuildingType> BuildingSet;
 
 
         protected override void OnUpdate()
@@ -95,7 +95,7 @@ namespace DOTSInMars.Buildings
                             _spawn = null;
                             var previewEntity = SystemAPI.GetSingletonEntity<BuildingPreviewTag>();
                             EntityManager.DestroyEntity(previewEntity);
-                            BuildingSet?.Invoke();
+                            BuildingSet?.Invoke(_buildingType);
                         }
                     }
                 }

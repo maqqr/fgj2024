@@ -123,25 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &105433609 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4537431788379017746, guid: ca5cc88b9e59c03418a5a0b46772aae1,
-    type: 3}
-  m_PrefabInstance: {fileID: 877931132890766205}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &105433612
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 105433609}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 288eff558aaf3cf4da28ef85bf1fcc7f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _audioSource: {fileID: 0}
 --- !u!114 &564437429 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9003918080033787451, guid: ca5cc88b9e59c03418a5a0b46772aae1,
@@ -477,6 +458,60 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1987475860
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1987475862}
+  - component: {fileID: 1987475861}
+  m_Layer: 0
+  m_Name: NarrationsDictionary
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1987475861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1987475860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1b7e2ad5ae711d47b8596c077fa843d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _narrations:
+  - Text: "Hyv\xE4 homma!"
+    AudioClip: {fileID: 8300000, guid: 1b07d2673b41da54193eb7c7500911d7, type: 3}
+    Type: 1
+  - Text: Manu valmis
+    AudioClip: {fileID: 8300000, guid: 8aeec461b89595240bf7c914a3222ed7, type: 3}
+    Type: 1
+  - Text: "Hyv\xE4!"
+    AudioClip: {fileID: 8300000, guid: 2a87b3f48559b814c8af4bc6eb0e0e59, type: 3}
+    Type: 3
+--- !u!4 &1987475862
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1987475860}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2040345057
 GameObject:
   m_ObjectHideFlags: 0
@@ -635,11 +670,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3919399130474996066, guid: ca5cc88b9e59c03418a5a0b46772aae1,
         type: 3}
-      propertyPath: _narrator
-      value: 
-      objectReference: {fileID: 105433612}
-    - target: {fileID: 3919399130474996066, guid: ca5cc88b9e59c03418a5a0b46772aae1,
-        type: 3}
       propertyPath: _firstButton
       value: 
       objectReference: {fileID: 564437429}
@@ -713,6 +743,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameplayUI
       objectReference: {fileID: 0}
+    - target: {fileID: 5292013777621902758, guid: ca5cc88b9e59c03418a5a0b46772aae1,
+        type: 3}
+      propertyPath: _narrations
+      value: 
+      objectReference: {fileID: 1987475861}
     - target: {fileID: 5774369411653581796, guid: ca5cc88b9e59c03418a5a0b46772aae1,
         type: 3}
       propertyPath: m_Layer
@@ -781,11 +816,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4537431788379017746, guid: ca5cc88b9e59c03418a5a0b46772aae1,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 105433612}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ca5cc88b9e59c03418a5a0b46772aae1, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
@@ -796,3 +827,4 @@ SceneRoots:
   - {fileID: 2040345059}
   - {fileID: 877931132890766205}
   - {fileID: 1420393815}
+  - {fileID: 1987475862}
