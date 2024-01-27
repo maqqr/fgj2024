@@ -47,7 +47,7 @@ namespace DOTSInMars
                     Entity prefabEntity = ResourceItemPrefab.Get(buffer, Resources.ResourceType.Bronze);
                     var itemEntity = EntityManager.Instantiate(prefabEntity);
                     LocalTransform itemLocalTransform = EntityManager.GetComponentData<LocalTransform>(itemEntity);
-                    itemLocalTransform.Position = localTransform.Position + building.OutputOffset;
+                    itemLocalTransform.Position = localTransform.Position + localTransform.TransformDirection(building.OutputOffset);
                     EntityManager.SetComponentData(itemEntity, itemLocalTransform);
                 }
             }).WithNone<BuildingPreviewTag>().WithStructuralChanges().WithoutBurst().Run();
