@@ -56,7 +56,7 @@ namespace DOTSInMars
                     {
                         // Spawn item
                         DynamicBuffer<ResourceItemPrefabElement> buffer = SystemAPI.GetBuffer<ResourceItemPrefabElement>(singleton);
-                        Entity prefabEntity = ResourceItemPrefab.Get(buffer, Resources.ResourceType.Bronze);
+                        Entity prefabEntity = ResourceItemPrefab.Get(buffer, recipe.Output);
                         var itemEntity = EntityManager.Instantiate(prefabEntity);
                         LocalTransform itemLocalTransform = EntityManager.GetComponentData<LocalTransform>(itemEntity);
                         itemLocalTransform.Position = targetPosition;
