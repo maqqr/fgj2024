@@ -68,10 +68,13 @@ namespace DOTSInMars
 
                         if (!conveyedItems.TryGetValue(conveyorTargetGridPosition, out Entity anotherItem))
                         {
-                            conveyedItem.StartPosition = conveyorGridPosition;
-                            conveyedItem.TargetPosition = conveyorTargetGridPosition;
-                            conveyedItem.Progress = 0.0f;
-                            conveyedItems.Add(conveyedItem.TargetPosition, entity);
+                            if (conveyors.TryGetValue(conveyorTargetGridPosition, out Entity anotherConveyor))
+                            {
+                                conveyedItem.StartPosition = conveyorGridPosition;
+                                conveyedItem.TargetPosition = conveyorTargetGridPosition;
+                                conveyedItem.Progress = 0.0f;
+                                conveyedItems.Add(conveyedItem.TargetPosition, entity);
+                            }
                         }
                     }
                     else
