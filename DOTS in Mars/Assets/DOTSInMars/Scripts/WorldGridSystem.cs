@@ -42,14 +42,9 @@ namespace DOTSInMars
                         var transform = SystemAPI.GetComponentRW<LocalTransform>(entity);
                         transform.ValueRW.Position = new Vector3(x + 0.5f, -0.5f, z + 0.5f);
 
-                        var obstacleEntity = CheckForObstacles(cell.ValueRW, out float3 obstacleCenter);
-                        if (obstacleEntity != Entity.Null)
+                        var obstacle = CheckForObstacles(cell.ValueRW);
+                        if (obstacle)
                         {
-                            //Debug.Log("Obstacle:" + x + " - " + z + " | " + obstacleCenter);
-                            var obstacleInfo = SystemAPI.GetComponentRW<Obstacle>(obstacleEntity);
-                            var gridOffset = cell.ValueRW.Coordinates - obstacleCenter;
-                            //Debug.Log("Grid offset " + x + " " + z + " -> " + gridOffset + " obstacle center" + obstacleCenter);
-                            //obstacleInfo.ValueRW.GetBlockerAt((int) gridOffset.x, (int) gridOffset.z);
                         }
 
 
@@ -57,7 +52,7 @@ namespace DOTSInMars
                         var entityColor = SystemAPI.GetComponentRW<URPMaterialPropertyBaseColor>(entity);
                         bool isEvenTile = (x + z) % 2 == 0;
                         float tintValue = isEvenTile ? 1.0f : 0.7f;
-                        float4 finalColor = obstacleEntity != Entity.Null ? new float4(1, 0, 0, 1) * tintValue : groundColor * tintValue;
+                        float4 finalColor = obstacle ? new float4(1, 0, 0, 1) * tintValue : groundColor * tintValue;
                         entityColor.ValueRW.Value = finalColor;
                     }
                 }
@@ -66,28 +61,26 @@ namespace DOTSInMars
             }
         }
 
-        private Entity CheckForObstacles(WorldGridCell cell, out float3 objectCenter)
+        private bool CheckForObstacles(WorldGridCell cell)
         {
             var cellCoordinate = cell.GetWorldCoordinate();
             var rayStart = cellCoordinate + new float3(0, 100, 0);
             var rayEnd = rayStart + new float3(0, -10000, 0);
 
-            //Debug.Log("Ray " + rayStart + " <-> " + rayEnd);
-
-            objectCenter = new float3();
-
             if (!Raycast(rayStart, rayEnd, out Unity.Physics.RaycastHit hit))
             {
-                return Entity.Null;
+                return false;
             }
-            // hyihyi
-            var transform = SystemAPI.GetComponentRW<LocalTransform>(hit.Entity);
-            objectCenter = transform.ValueRO.Position;
             if (EntityManager.HasComponent<Obstacle>(hit.Entity))
             {
-                return hit.Entity;
+                //Debug.Log(hit.Position);
+                if (hit.Position.y - 0.3f < cellCoordinate.y)
+                {
+                    return false;
+                }
+                return true;
             }
-            return Entity.Null;
+            return false;
         }
 
         public bool Raycast(float3 rayFrom, float3 rayTo, out Unity.Physics.RaycastHit target)

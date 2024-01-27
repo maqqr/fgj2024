@@ -14,7 +14,7 @@ namespace DOTSInMars
         // basically the transform
         public float3 GetWorldCoordinate()
         {
-            return new Vector3(Coordinates.x + 0.5f, Coordinates.y - 0.5f, Coordinates.z + 0.5f);
+            return new float3(Coordinates.x + 0.5f, Coordinates.y - 0.5f, Coordinates.z + 0.5f);
         }
     }
 }
