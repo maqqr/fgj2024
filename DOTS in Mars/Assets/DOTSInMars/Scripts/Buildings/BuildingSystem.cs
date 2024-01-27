@@ -11,6 +11,8 @@ namespace DOTSInMars
 {
     public partial class BuildingSystem : SystemBase
     {
+        public event System.Action DepositedFinalItem;
+
         protected override void OnUpdate()
         {
             Entity singleton = SystemAPI.GetSingletonEntity<ResourceItemPrefabSingleton>();
@@ -108,8 +110,7 @@ namespace DOTSInMars
                     {
                         if (recipe.Output == Resources.ResourceType.Score)
                         {
-                            UnityEngine.Debug.Log("Player got one point for producing the final item");
-                            // TODO: increase player score
+                            DepositedFinalItem();
                         }
                         else
                         {
