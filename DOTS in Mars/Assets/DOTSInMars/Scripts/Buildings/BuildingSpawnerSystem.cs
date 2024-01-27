@@ -72,11 +72,21 @@ namespace DOTSInMars.Buildings
                         var shifted = Input.GetKey(KeyCode.LeftShift);
                         var building = SpawnBuildings();
                         var pos = EntityManager.GetComponentData<LocalTransform>(building);
+                        var gridPosition = WorldGridUtils.ToGridPosition(pos.Position);
+
+                        Entity foundGridEntity = default;
+                        Entities.ForEach((Entity entity, ref LocalTransform transform, ref WorldGridCell cell) =>
+                        {
+                            if (math.all(cell.Coordinates == gridPosition))
+                            {
+                                foundGridEntity = entity;
+                            }
+                        }).WithoutBurst().Run();
 
 
-                        //var grid = EntityManager.GetComponentData<WorldGridCell>(hit.Entity);
-                        //grid.Blocked = true;
-                        //EntityManager.SetComponentData(hit.Entity, grid);
+                        var grid = EntityManager.GetComponentData<WorldGridCell>(foundGridEntity);
+                        grid.Blocked = true;
+                        EntityManager.SetComponentData(foundGridEntity, grid);
 
                         _placeable = false;
                        
