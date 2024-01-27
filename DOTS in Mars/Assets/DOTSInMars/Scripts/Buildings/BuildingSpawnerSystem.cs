@@ -36,14 +36,10 @@ namespace DOTSInMars.Buildings
         private bool _raycastRequested;
         private BuildingType _buildingType;
         private bool _onclick;
+        private bool _placeable;
 
         public event Action BuildingSet;
 
-        internal void RegisterMinerForAdding(float3 screenPosition)
-        {
-            UnityEngine.Debug.Log($"Raycasting at {screenPosition}");
-
-        }
 
         protected override void OnUpdate()
         {
@@ -70,17 +66,27 @@ namespace DOTSInMars.Buildings
                 //TODO: use UI click instead of this to allow for UI to take control from this
                 if (_onclick)
                 {
-                    BuildingSet?.Invoke();
-
-                    var shifted = Input.GetKey(KeyCode.LeftShift);
-                    SpawnBuildings();
                     _onclick = false;
-                    if (!shifted)
+                    if (_placeable)
                     {
-                        _spawn = null;
+                        var shifted = Input.GetKey(KeyCode.LeftShift);
+                        var building = SpawnBuildings();
+                        var pos = EntityManager.GetComponentData<LocalTransform>(building);
 
-                        var previewEntity = SystemAPI.GetSingletonEntity<BuildingPreviewTag>();
-                        EntityManager.DestroyEntity(previewEntity);
+
+                        //var grid = EntityManager.GetComponentData<WorldGridCell>(hit.Entity);
+                        //grid.Blocked = true;
+                        //EntityManager.SetComponentData(hit.Entity, grid);
+
+                        _placeable = false;
+                       
+                        if (!shifted)
+                        {
+                            _spawn = null;
+                            var previewEntity = SystemAPI.GetSingletonEntity<BuildingPreviewTag>();
+                            EntityManager.DestroyEntity(previewEntity);
+                            BuildingSet?.Invoke();
+                        }
                     }
                 }
             }
@@ -110,6 +116,7 @@ namespace DOTSInMars.Buildings
                 _spawn = new(new float3(0, 0.5f, 0), prefab, quaternion.identity);
 
                 var spawnedEntity = SpawnBuildings();
+                _placeable = true;
                 //TODO: add material that is transparent etc.
                 EntityManager.AddComponent<BuildingPreviewTag>(spawnedEntity);
 
@@ -148,7 +155,8 @@ namespace DOTSInMars.Buildings
                 //TODO: some red and error sounds
                 return;
             }
-            _spawn.Position = new float3(grid.Coordinates.x + 0.5f, 0.0f, grid.Coordinates.z + 0.5f);
+            _placeable = true;
+            _spawn.Position = new float3(grid.Coordinates.x + 0.5f, grid.Coordinates.y, grid.Coordinates.z + 0.5f);
         }
 
 
