@@ -28,5 +28,10 @@ namespace DOTSInMars.Narrator
             _audioSource.Play();
             return true;
         }
+
+        internal void Stop()
+        {
+            _audioSource.Stop();
+        }
     }
 }

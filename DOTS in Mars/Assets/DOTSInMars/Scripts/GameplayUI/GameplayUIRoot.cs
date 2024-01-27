@@ -29,6 +29,11 @@ namespace DOTSInMars.UI
         private BuildingSpawnerSystem _spawner;
         private BuildingButton _selectedButton;
         private int _points = 0;
+        private int _buildingsPlaced = 0;
+
+        public const int BUILDINGS_PLACED_FIRST = 50;
+        public const int BUILDINGS_PLACED_SECOND = 100;
+
 
         private void Start()
         {
@@ -46,6 +51,7 @@ namespace DOTSInMars.UI
             yield return new WaitForSeconds(0.5f);
             _spawner = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<BuildingSpawnerSystem>();
             _spawner.BuildingSet += BuildingPlaced;
+            _spawner.BuildingPlacementDone += BuildingPlacementStopped;
             _spawner.PlayerIdlesWithBuilding += BuildingIdling;
             _buildingSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<BuildingSystem>();
             _buildingSystem.DepositedFinalItem += DepositedFinalItem;
@@ -56,8 +62,15 @@ namespace DOTSInMars.UI
             var narration = type switch {
                 BuildingType.Manufacturer => NarrationType.ManufacturerPlacementIdling,
                 BuildingType.Refinery => NarrationType.RefineryPlacementIdling,
+                BuildingType.Miner => NarrationType.MinerPlacementIdling,
+                BuildingType.Conveyor => NarrationType.ConveyorPlacementIdling,
                 _ => NarrationType.BuildingPlacementIdling
             };
+            if (UnityEngine.Random.Range(0, 101) <= 20)
+            {
+                narration = NarrationType.BuildingPlacementIdling;
+            }
+
             HandleNarration(narration);
         }
 
@@ -77,6 +90,8 @@ namespace DOTSInMars.UI
             _selectedButton = _conveyorButton;
             _selectedButton.Highlight();
             _spawner.RegisterRaycasting(BuildingType.Conveyor);
+
+            HandleNarration(NarrationType.ConveyorPlacementStart);
         }
 
         private void OnManufacturerButtonClick()
@@ -90,6 +105,7 @@ namespace DOTSInMars.UI
             _selectedButton = _manufacturerButton;
             _selectedButton.Highlight();
             _spawner.RegisterRaycasting(BuildingType.Manufacturer);
+            HandleNarration(NarrationType.ManufacturerPlacementStart);
         }
 
         private void OnRefineryButtonClick()
@@ -103,6 +119,7 @@ namespace DOTSInMars.UI
             _selectedButton = _refineryButton;
             _selectedButton.Highlight();
             _spawner.RegisterRaycasting(BuildingType.Refinery);
+            HandleNarration(NarrationType.RefineryPlacementStart);
         }
 
 
@@ -117,8 +134,10 @@ namespace DOTSInMars.UI
             _selectedButton = _mineButton;
             _selectedButton.Highlight();
             _spawner.RegisterRaycasting(BuildingType.Miner);
+            HandleNarration(NarrationType.MinerPlacementStart);
         }
-        private void BuildingPlaced(BuildingType type)
+
+        private void BuildingPlacementStopped(BuildingType type)
         {
             if (_selectedButton != null)
             {
@@ -126,12 +145,30 @@ namespace DOTSInMars.UI
 
             }
             _selectedButton = null;
+        }
 
+        private void BuildingPlaced(BuildingType type)
+        {
+            _buildingsPlaced++;
             var narration = type switch
             {
                 BuildingType.Manufacturer => NarrationType.ManufacturerDone,
+                BuildingType.Refinery => NarrationType.RefineryDone,
+                BuildingType.Miner => NarrationType.MinerDone,
+                BuildingType.Conveyor => NarrationType.ConveyorDone,
                 _ => NarrationType.IdleChatter,
             };
+            if (_buildingsPlaced == BUILDINGS_PLACED_FIRST)
+            {
+                _narrator.Stop();
+                narration = NarrationType.InsanityByRepeatedEffort;
+            }
+            else if (_buildingsPlaced == BUILDINGS_PLACED_SECOND)
+            {
+                _narrator.Stop();
+                narration = NarrationType.InsanityByRepeatedEffortSecond;
+            }
+
             HandleNarration(narration);
         }
 
@@ -145,6 +182,7 @@ namespace DOTSInMars.UI
 
         private void HandleNarration(NarrationType narration, float duration = 2.5f)
         {
+            StopAllCoroutines();
             StartCoroutine(StartAnnouncements(narration, duration));
         }
 
