@@ -25,7 +25,7 @@ namespace DOTSInMars
 
             Entities.ForEach((Entity entity, in ConveyedItem conveyedItem) => {
                 conveyedItems.Add(conveyedItem.TargetPosition, entity);
-            }).WithAll<ResourceItem>().Run();
+            }).WithAll<ConveyedItem, ResourceItem>().Run();
 
             Entities.ForEach((Entity entity, in LocalTransform localTransform) => {
                 conveyors.Add(WorldGridUtils.ToGridPosition(localTransform.Position), entity);
@@ -36,16 +36,15 @@ namespace DOTSInMars
                 conveyedItem.Progress = math.min(1.0f, conveyedItem.Progress + SystemAPI.Time.DeltaTime);
 
                 float3 movement = WorldGridUtils.FromGridPosition(conveyedItem.TargetPosition - conveyedItem.StartPosition) * conveyedItem.Progress;
-                localTransform.Position = new float3(0.5f, 1.0f, 0.5f) + WorldGridUtils.FromGridPosition(conveyedItem.StartPosition) + movement;
+                localTransform.Position = new float3(0.5f, 0.3f, 0.5f) + WorldGridUtils.FromGridPosition(conveyedItem.StartPosition) + movement;
             }).Run();
 
             // Put items on conveyors if possible
             EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
             Entities.ForEach((Entity entity, in LocalTransform localTransform) => {
                 int3 gridPosition = WorldGridUtils.ToGridPosition(localTransform.Position);
-                Entity conveyorEntity;
     
-                if (conveyors.TryGetValue(gridPosition, out conveyorEntity))
+                if (conveyors.TryGetValue(gridPosition, out Entity conveyorEntity))
                 {
                     if (!conveyedItems.TryGetValue(gridPosition, out Entity anotherItem))
                     {
@@ -54,7 +53,7 @@ namespace DOTSInMars
                         conveyedItems.Add(gridPosition, entity);
                     }
                 }
-            }).WithAll<ResourceItem>().WithNone<ConveyedItem>().Run();
+            }).WithAll<ResourceItem>().WithDisabled<ConveyedItem>().Run();
 
             // Pass items onto next conveyor if movement has completed
             Entities.ForEach((Entity entity, ref ConveyedItem conveyedItem) => {
@@ -80,7 +79,7 @@ namespace DOTSInMars
                         ecb.SetComponentEnabled<ConveyedItem>(entity, false);
                     }
                 }
-            }).Run();
+            }).WithAll<ConveyedItem>().Run();
 
             ecb.Playback(EntityManager);
             ecb.Dispose();
