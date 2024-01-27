@@ -10,6 +10,7 @@ namespace DOTSInMars.Resources
     {
         CopperOre,
         CopperBar,
-        Giggels
+        Giggels,
+        Score, // Special resource type that increases the score instead of being physical item
     }
 }

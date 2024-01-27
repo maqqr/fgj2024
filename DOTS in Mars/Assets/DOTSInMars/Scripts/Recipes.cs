@@ -34,6 +34,14 @@ namespace DOTSInMars
             new() { Duration = 2.0f, Inputs = new ResourceWithAmount[] { new(ResourceType.CopperOre, 3) }, Output = ResourceType.CopperBar },
             // Manufacturer
             new() { Duration = 3.0f, Inputs = new ResourceWithAmount[] { new(ResourceType.CopperBar, 3), new(ResourceType.CopperBar, 3) }, Output = ResourceType.Giggels },
+            // Deposit
+            new() { Duration = 0.1f, Inputs = new ResourceWithAmount[]
+            {
+                new(ResourceType.Giggels, 1), new(ResourceType.Giggels, 1),
+                new(ResourceType.Giggels, 1), new(ResourceType.Giggels, 1),
+                new(ResourceType.Giggels, 1), new(ResourceType.Giggels, 1),
+                new(ResourceType.Giggels, 1), new(ResourceType.Giggels, 1),
+            }, Output = ResourceType.Score },
         };
 
         public static Recipe Get(int index)

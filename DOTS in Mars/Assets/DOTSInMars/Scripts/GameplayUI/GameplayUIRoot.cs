@@ -18,6 +18,7 @@ namespace DOTSInMars.UI
         [SerializeField] private BuildingButton _manufacturerButton;
         [SerializeField] private BuildingButton _conveyorButton;
 
+        private BuildingSystem _buildingSystem;
         private BuildingSpawnerSystem _spawner;
         private BuildingButton _selectedButton;
 
@@ -36,6 +37,8 @@ namespace DOTSInMars.UI
             yield return new WaitForSeconds(0.5f);
             _spawner = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<BuildingSpawnerSystem>();
             _spawner.BuildingSet += ResetBuildingPlacement;
+            _buildingSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<BuildingSystem>();
+            _buildingSystem.DepositedFinalItem += DepositedFinalItem;
         }
 
         private void BackgroundClicked()
@@ -103,6 +106,12 @@ namespace DOTSInMars.UI
 
             }
             _selectedButton = null;
+        }
+
+        private void DepositedFinalItem()
+        {
+            // TODO: increase player score and display it
+            UnityEngine.Debug.Log("Player got one point for producing the final item");
         }
     }
 

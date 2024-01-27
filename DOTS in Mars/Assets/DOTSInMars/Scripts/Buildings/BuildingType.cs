@@ -11,6 +11,7 @@ namespace DOTSInMars.Buildings
         Miner,
         Refinery,
         Manufacturer,
-        Conveyor
+        Conveyor,
+        Deposit,
     }
 }

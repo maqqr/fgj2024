@@ -21,7 +21,7 @@ namespace DOTSInMars.Buildings
         public BuildingType Type;
         public int Recipe;
         public float3 OutputOffset;
-        public FixedList64Bytes<float3> InputOffsets;
+        public FixedList128Bytes<float3> InputOffsets;
 
         public FixedList64Bytes<int> ContainedItems;
     }

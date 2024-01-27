@@ -11,7 +11,7 @@ namespace DOTSInMars.Buildings
 {
     public class ManufacturerAuthoring : MonoBehaviour
     {
-        class MinerBaker : Baker<ManufacturerAuthoring>
+        class ManufacturerBaker : Baker<ManufacturerAuthoring>
         {
             public override void Bake(ManufacturerAuthoring authoring)
             {
