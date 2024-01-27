@@ -37,12 +37,17 @@ namespace DOTSInMars.Buildings
         private BuildingType _buildingType;
         private bool _onclick;
         private bool _placeable;
+        private float _idleBuildingTime = 0f;
 
+        public const float IDLE_TIME_FOR_COMMENTARY = 15;
+
+        public event Action<BuildingType> PlayerIdlesWithBuilding;
         public event Action<BuildingType> BuildingSet;
 
 
         protected override void OnUpdate()
         {
+            var deltaTime = SystemAPI.Time.DeltaTime;
             if (_camera == null)
             {
                 _camera = Camera.main;
@@ -131,6 +136,20 @@ namespace DOTSInMars.Buildings
                 EntityManager.AddComponent<BuildingPreviewTag>(spawnedEntity);
 
                 _raycastRequested = false;
+            }
+
+            if (_spawn != null)
+            {
+                _idleBuildingTime += deltaTime;
+                if (_idleBuildingTime > IDLE_TIME_FOR_COMMENTARY)
+                {
+                    _idleBuildingTime = 0;
+                    PlayerIdlesWithBuilding?.Invoke(_buildingType);
+                }
+            }
+            else
+            {
+                _idleBuildingTime = 0;
             }
         }
 

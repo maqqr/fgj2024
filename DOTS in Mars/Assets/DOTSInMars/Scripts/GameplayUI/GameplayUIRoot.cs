@@ -44,8 +44,19 @@ namespace DOTSInMars.UI
             yield return new WaitForSeconds(0.5f);
             _spawner = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<BuildingSpawnerSystem>();
             _spawner.BuildingSet += BuildingPlaced;
+            _spawner.PlayerIdlesWithBuilding += BuildingIdling;
             _buildingSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<BuildingSystem>();
             _buildingSystem.DepositedFinalItem += DepositedFinalItem;
+        }
+
+        private void BuildingIdling(BuildingType type)
+        {
+            var narration = type switch {
+                BuildingType.Manufacturer => NarrationType.ManufacturerPlacementIdling,
+                BuildingType.Refinery => NarrationType.RefineryPlacementIdling,
+                _ => NarrationType.BuildingPlacementIdling
+            };
+            HandleNarration(narration);
         }
 
         private void BackgroundClicked()
@@ -119,7 +130,7 @@ namespace DOTSInMars.UI
                 BuildingType.Manufacturer => NarrationType.ManufacturerDone,
                 _ => NarrationType.IdleChatter,
             };
-            HandleSentenceShowing(narration);
+            HandleNarration(narration);
         }
 
         private void DepositedFinalItem()
@@ -129,10 +140,10 @@ namespace DOTSInMars.UI
 
 
 
-            HandleSentenceShowing(NarrationType.DepositedValuableItems, 2.5f);
+            HandleNarration(NarrationType.DepositedValuableItems, 2.5f);
         }
 
-        private void HandleSentenceShowing(NarrationType narration, float duration = 2.5f)
+        private void HandleNarration(NarrationType narration, float duration = 2.5f)
         {
             StartCoroutine(StartAnnouncements(narration, duration));
         }
@@ -140,11 +151,14 @@ namespace DOTSInMars.UI
 
         private IEnumerator StartAnnouncements(NarrationType narration, float duration)
         {
-            _parentForDisplay.gameObject.SetActive(true);
             var narrationFound = _narrator.GetNarration(narration);
             if (narrationFound != null)
             {
-                _displayText.text = narrationFound.Text;
+                if (!string.IsNullOrEmpty(narrationFound.Text))
+                {
+                    _parentForDisplay.gameObject.SetActive(true);
+                    _displayText.text = narrationFound.Text;
+                }
                 _narrator.Announce(narrationFound.AudioClip);
                 yield return new WaitForSeconds(duration);
                 _parentForDisplay.gameObject.SetActive(false);

@@ -497,6 +497,12 @@ MonoBehaviour:
   - Text: "Hyv\xE4!"
     AudioClip: {fileID: 8300000, guid: 2a87b3f48559b814c8af4bc6eb0e0e59, type: 3}
     Type: 3
+  - Text: 
+    AudioClip: {fileID: 8300000, guid: 3b7cf087d08204348a14cdb48c01dc6b, type: 3}
+    Type: 6
+  - Text: 
+    AudioClip: {fileID: 8300000, guid: c1083f0731dc5c748b8e18d4ea390c56, type: 3}
+    Type: 5
 --- !u!4 &1987475862
 Transform:
   m_ObjectHideFlags: 0

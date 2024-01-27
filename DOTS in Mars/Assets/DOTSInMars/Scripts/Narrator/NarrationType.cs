@@ -12,5 +12,8 @@ namespace DOTSInMars.Narrator
         ManufacturerDone,
         IdleChatter,
         DepositedValuableItems,
+        BuildingPlacementIdling,
+        RefineryPlacementIdling,
+        ManufacturerPlacementIdling,
     }
 }
