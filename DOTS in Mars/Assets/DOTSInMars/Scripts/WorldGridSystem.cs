@@ -36,7 +36,7 @@ public partial struct WorldGridSystem : ISystem
                     var cell = SystemAPI.GetComponentRW<WorldGridCell>(entity);
                     cell.ValueRW.Coordinates = new Vector3Int(x, 0, z);
                     var transform = SystemAPI.GetComponentRW<LocalTransform>(entity);
-                    transform.ValueRW.Position = new Vector3(x, -0.5f, z);
+                    transform.ValueRW.Position = new Vector3(x + 0.5f, -0.5f, z + 0.5f);
                     //var renderMesh = SystemAPI.GetComponentRW<RenderMeshArray>(entity);
                     
                     state.EntityManager.AddComponent<URPMaterialPropertyBaseColor>(entity);
