@@ -24,6 +24,8 @@ namespace DOTSInMars.Buildings
         private bool _raycasting;
         private bool _raycastRequested;
 
+        public event Action BuildingSet;
+
         internal void RegisterMinerForAdding(float3 screenPosition)
         {
             UnityEngine.Debug.Log($"Raycasting at {screenPosition}");
@@ -59,10 +61,8 @@ namespace DOTSInMars.Buildings
             {
                 var (position, prefab) = _spawns[i];
                 var newMiner = EntityManager.Instantiate(prefab);
-                EntityManager.SetComponentData<LocalTransform>(newMiner, new LocalTransform
-                {
-                    Position = position,
-                });
+                var rwTrans = SystemAPI.GetComponentRW<LocalTransform>(newMiner);
+                rwTrans.ValueRW.Position = position;
             }
             _spawns.Clear();
         }
@@ -71,7 +71,7 @@ namespace DOTSInMars.Buildings
         {
             var ray = _camera.ScreenPointToRay(Input.mousePosition);
             var rayStart = ray.origin;
-            var rayEnd = ray.GetPoint(1000f);
+            var rayEnd = ray.GetPoint(100f);
 
 
             if (!Raycast(rayStart, rayEnd, out Unity.Physics.RaycastHit hit))
@@ -92,6 +92,7 @@ namespace DOTSInMars.Buildings
 
             _spawns.Add(new(new float3(grid.Coordinates.x, 0.5f, grid.Coordinates.z), data.Miner));
             _raycasting = false;
+            BuildingSet?.Invoke();
         }
 
 
