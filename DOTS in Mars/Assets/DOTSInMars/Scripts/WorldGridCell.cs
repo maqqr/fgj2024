@@ -2,9 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Entities;
+using Unity.Mathematics;
 
-public struct WorldGridCell : IComponentData
+namespace DOTSInMars
 {
-    public bool Blocked;
-    public Vector3Int Coordinates;
+    public struct WorldGridCell : IComponentData
+    {
+        public bool Blocked;
+        public int3 Coordinates;
+
+        // basically the transform
+        public float3 GetWorldCoordinate()
+        {
+            return new Vector3(Coordinates.x + 0.5f, Coordinates.y - 0.5f, Coordinates.z + 0.5f);
+        }
+    }
 }

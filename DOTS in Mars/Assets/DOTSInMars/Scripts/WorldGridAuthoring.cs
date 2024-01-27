@@ -3,22 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Entities;
 
-public class WorldGridCellAuthoring : MonoBehaviour
+namespace DOTSInMars
 {
-    [SerializeField] private GameObject gridCellPrefab;
-    class WorldGridCellBaker : Baker<WorldGridCellAuthoring>
+
+
+    public class WorldGridCellAuthoring : MonoBehaviour
     {
-        public override void Bake(WorldGridCellAuthoring authoring)
+        [SerializeField] private GameObject gridCellPrefab;
+        class WorldGridCellBaker : Baker<WorldGridCellAuthoring>
         {
-            var entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponent(entity, new GridSpawner { 
-                GridCellPrefab = GetEntity(authoring.gridCellPrefab, TransformUsageFlags.None) 
+            public override void Bake(WorldGridCellAuthoring authoring)
+            {
+                var entity = GetEntity(TransformUsageFlags.Dynamic);
+                AddComponent(entity, new GridSpawner
+                {
+                    GridCellPrefab = GetEntity(authoring.gridCellPrefab, TransformUsageFlags.None)
                 }
-            );
+                );
+            }
         }
-    }
-    public struct GridSpawner: IComponentData
-    {
-        public Entity GridCellPrefab;
+        public struct GridSpawner : IComponentData
+        {
+            public Entity GridCellPrefab;
+        }
     }
 }
