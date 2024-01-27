@@ -19,9 +19,11 @@ namespace DOTSInMars.Buildings
                 var building = new Building
                 {
                     Type = BuildingType.Manufacturer,
-                    Recipe = 0,
+                    Recipe = 2,
                     OutputOffset = new float3(2.0f, 0.0f, 1.0f),
                 };
+                building.InputOffsets.Add(new float3(-2.0f, 0.0f, 1.0f));
+                building.InputOffsets.Add(new float3(-2.0f, 0.0f, -1.0f));
                 AddComponent(entity, building);
                 AddComponent(entity, new BuildingProduction());
                 SetComponentEnabled<BuildingProduction>(entity, false);
