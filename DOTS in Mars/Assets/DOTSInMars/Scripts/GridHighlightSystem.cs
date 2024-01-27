@@ -37,6 +37,8 @@ namespace DOTSInMars
 
         private Entity mainHighlighter;
 
+        private FixedList512Bytes<Entity> secondaryHighlighters;
+
 
         protected override void OnUpdate()
         {
@@ -52,21 +54,23 @@ namespace DOTSInMars
             {
                 var transform = SystemAPI.GetComponentRW<LocalTransform>(mainHighlighter);
                 transform.ValueRW.Position = targetCenter + new float3(0, highlighterOffset, 0);
+                for (int i = 0; i < secondaryHighlighters.Length; i++)
+                {
+                    var secondaryEntity = secondaryHighlighters[i];
+                    var secondaryTransform = SystemAPI.GetComponentRW<LocalTransform>(secondaryEntity);
+                    var secondaryInfo = SystemAPI.GetComponentRW<GridHighlight>(secondaryEntity);
+                    secondaryTransform.ValueRW.Position = targetCenter + new float3(0, highlighterOffset, 0) + secondaryInfo.ValueRO.Offset;
+                }
             }
         }
 
         private void InitializeHighlighters()
         {
-
-            //state.RequireForUpdate<execute>();
             Entity highlighterPrefab = SystemAPI.GetSingleton<WorldGridCellAuthoring.GridSpawner>().GridHighlighterPrefab;
-
             mainHighlighter = EntityManager.Instantiate(highlighterPrefab);
             EntityManager.AddComponent<GridHighlight>(mainHighlighter);
-            //var mainHighlighter = SystemAPI.GetComponentRW<GridHighlight>(entity);
-            //mainHighlighterTransform = SystemAPI.GetComponentRW<LocalTransform>(entity).ValueRW;
-            //_mainHighlight
-            Debug.Log("Highlighter init");
+            InstantiateHighlightHelpers();
+            //Debug.Log("Highlighter init");
             _initialized = true;
         }
 
@@ -115,9 +119,38 @@ namespace DOTSInMars
         }
 
 
-        private void InstantiateHighlightHelper()
+        private void InstantiateHighlightHelpers()
         {
+            var singleton = SystemAPI.GetSingleton<WorldGridCellAuthoring.GridSpawner>();
+            Entity highlighterPrefab = singleton.GridHighlighterPrefab;
+            FixedList512Bytes<Entity> secondaries = new FixedList512Bytes<Entity>();
+            for (int x = 0; x < singleton.SecondaryHighlightersXLength; x++)
+            {
+                for (int y = 0; y < singleton.SecondaryHighlightersYLength; y++)
+                {
+                    int index = x * singleton.SecondaryHighlightersXLength + y;
+                    var enabled = singleton.SecondaryHighlighterPositions[index];
+                    if (enabled)
+                    {
+                        var highlightEntity = EntityManager.Instantiate(highlighterPrefab);
+                        secondaryHighlighters.Add(highlightEntity);
+                        EntityManager.AddComponent<GridHighlight>(highlightEntity);
+                        var highLightComponent = SystemAPI.GetComponentRW<GridHighlight>(highlightEntity);
+                        float xOffset = (float)x - (float)singleton.SecondaryHighlightersXLength / 2 + 0.5f;
+                        float zOffset = (float)y - (float)singleton.SecondaryHighlightersYLength / 2 + 0.5f;
+                        Debug.Log(x + " | " + y + " | " + xOffset + " | " + zOffset + " | " + singleton.SecondaryHighlightersXLength + " | " + singleton.SecondaryHighlightersYLength);
+                        highLightComponent.ValueRW.Offset = new float3(xOffset, 0, zOffset);
+                        secondaries.Add(highlightEntity);
+                        //Debug.Log("add secondary " + highLightComponent.ValueRW.Offset);
+                    }
+                }
+            }
+            secondaryHighlighters = secondaries; // a bit useless step
+        }
 
+        // this is pretty stupid, but guess it works
+        private void AdjustSecondaryHighlighters(float3 targetCenter)
+        {
         }
     }
 }
