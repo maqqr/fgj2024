@@ -15,7 +15,7 @@ namespace DOTSInMars.Buildings
         {
             public override void Bake(MinerAuthoring authoring)
             {
-                var entity = GetEntity(TransformUsageFlags.Dynamic);
+                var entity = GetEntity(TransformUsageFlags.None);
                 AddComponent(entity, new Building
                 {
                     Type = BuildingType.Miner,

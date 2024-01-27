@@ -12,8 +12,6 @@ namespace DOTSInMars.Buildings
     {
         [SerializeField] private GameObject _miner;
 
-        public GameObject Miner => _miner;
-
         class BuildingCatalogBaker : Baker<BuildingCatalogAuthoring>
         {
             public override void Bake(BuildingCatalogAuthoring authoring)
@@ -21,7 +19,7 @@ namespace DOTSInMars.Buildings
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
                 AddComponent(entity, new BuildingCatalog
                 {
-                    Miner = GetEntity(authoring.Miner, TransformUsageFlags.None)
+                    Miner = GetEntity(authoring._miner, TransformUsageFlags.None)
                 });
             }
         }

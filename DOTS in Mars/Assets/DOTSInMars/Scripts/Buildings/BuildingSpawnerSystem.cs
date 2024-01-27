@@ -8,13 +8,13 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Physics.Systems;
+using Unity.Rendering;
 using Unity.Transforms;
 using Unity.VisualScripting;
 using UnityEngine;
 
 namespace DOTSInMars.Buildings
 {
-
     public partial class BuildingSpawnerSystem : SystemBase
     {
         private List<(float3, Entity)> _spawns = new List<(float3, Entity)> ();
@@ -39,46 +39,59 @@ namespace DOTSInMars.Buildings
 
             if (_raycasting && Input.GetMouseButtonUp(0))
             {
-                var ray = _camera.ScreenPointToRay(Input.mousePosition);
-                var rayStart = ray.origin;
-                var rayEnd = ray.GetPoint(1000f);
-
-
-                if (!Raycast(rayStart, rayEnd, out Unity.Physics.RaycastHit hit))
-                {
-                    UnityEngine.Debug.Log($"No hit");
-                    return;
-                }
-                UnityEngine.Debug.Log($"Hit at {hit}");
-                var grid = EntityManager.GetComponentData<WorldGridCell>(hit.Entity);
-
-                var entity = SystemAPI.GetSingletonEntity<BuildingCatalog>();
-                var data = EntityManager.GetComponentData<BuildingCatalog>(entity);
-
-                _spawns.Add(new(new float3(grid.Coordinates.x, 0.5f, grid.Coordinates.z), data.Miner));
-                _raycasting = false;
+                HandleRaycasting();
             }
 
             if (_spawns.Count > 0)
             {
-                var ecb = new EntityCommandBuffer(Allocator.Temp);
-                for (int i = 0; i < _spawns.Count; i++)
-                {
-                    var (position, prefab) = _spawns[i];
-                    var newMiner = ecb.Instantiate(prefab);
-                    ecb.SetComponent(newMiner, new LocalTransform
-                    {
-                        Position = position,
-                    });
-                }
-                _spawns.Clear();
-                ecb.Playback(EntityManager);
+                SpawnBuildings();
             }
             if (_raycastRequested)
             {
                 _raycasting = true;
                 _raycastRequested = false;
             }
+        }
+
+        private void SpawnBuildings()
+        {
+            for (int i = 0; i < _spawns.Count; i++)
+            {
+                var (position, prefab) = _spawns[i];
+                var newMiner = EntityManager.Instantiate(prefab);
+                EntityManager.SetComponentData<LocalTransform>(newMiner, new LocalTransform
+                {
+                    Position = position,
+                });
+            }
+            _spawns.Clear();
+        }
+
+        private void HandleRaycasting()
+        {
+            var ray = _camera.ScreenPointToRay(Input.mousePosition);
+            var rayStart = ray.origin;
+            var rayEnd = ray.GetPoint(1000f);
+
+
+            if (!Raycast(rayStart, rayEnd, out Unity.Physics.RaycastHit hit))
+            {
+                UnityEngine.Debug.Log($"No hit");
+                return;
+            }
+            UnityEngine.Debug.Log($"Hit at {hit}");
+            var grid = EntityManager.GetComponentData<WorldGridCell>(hit.Entity);
+            if (grid.Blocked)
+            {
+                //TODO: some red and error sounds
+                return;
+            }
+
+            var entity = SystemAPI.GetSingletonEntity<BuildingCatalog>();
+            var data = EntityManager.GetComponentData<BuildingCatalog>(entity);
+
+            _spawns.Add(new(new float3(grid.Coordinates.x, 0.5f, grid.Coordinates.z), data.Miner));
+            _raycasting = false;
         }
 
 
