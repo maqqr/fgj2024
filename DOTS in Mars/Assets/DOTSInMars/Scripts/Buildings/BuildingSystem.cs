@@ -5,7 +5,6 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
-using UnityEditor.Build.Pipeline.Utilities;
 using UnityEngine;
 
 namespace DOTSInMars
@@ -33,6 +32,13 @@ namespace DOTSInMars
                 for (int i = 0; i < recipe.Inputs.Length; i++)
                 {
                     int3 eatPosition = WorldGridUtils.ToGridPosition(localTransform.Position + localTransform.TransformDirection(building.InputOffsets[i]));
+
+                    // {
+                    //     float3 asd = WorldGridUtils.FromGridPosition(eatPosition);
+                    //     Vector3 start = new Vector3(asd.x + 0.5f, asd.y, asd.z + 0.5f);
+                    //     UnityEngine.Debug.DrawLine(start, start + new Vector3(0, 2, 0), Color.red, 1.0f, false);
+                    // }
+
                     if (items.TryGetValue(eatPosition, out Entity itemEntity))
                     {
                         if (EntityManager.HasComponent<ResourceItem>(itemEntity))
@@ -59,11 +65,26 @@ namespace DOTSInMars
                 Recipe recipe = Recipes.Get(building.Recipe);
 
                 bool hasRequiredItemsInside = true;
-                for (int i = 0; i < recipe.Inputs.Length; i++)
+
+                if (recipe.Output != Resources.ResourceType.Score)
                 {
-                    if (building.ContainedItems[i] < recipe.Inputs[i].Amount)
-                        hasRequiredItemsInside = false;
+                    for (int i = 0; i < recipe.Inputs.Length; i++)
+                    {
+                        if (building.ContainedItems[i] < recipe.Inputs[i].Amount)
+                            hasRequiredItemsInside = false;
+                    }
                 }
+                else
+                {
+                    // Special case for score buildings: start producing score as soon as any input has something in it
+                    hasRequiredItemsInside = false;
+                    for (int i = 0; i < recipe.Inputs.Length; i++)
+                    {
+                        if (building.ContainedItems[i] > 0)
+                            hasRequiredItemsInside = true;
+                    }
+                }
+
                 if (hasRequiredItemsInside)
                 {
                     // Consume items
@@ -85,13 +106,21 @@ namespace DOTSInMars
                     int3 targetGridPosition = WorldGridUtils.ToGridPosition(targetPosition);
                     if (!items.TryGetValue(targetGridPosition, out Entity blockingItem))
                     {
-                        // Spawn item
-                        DynamicBuffer<ResourceItemPrefabElement> buffer = SystemAPI.GetBuffer<ResourceItemPrefabElement>(singleton);
-                        Entity prefabEntity = ResourceItemPrefab.Get(buffer, recipe.Output);
-                        var itemEntity = EntityManager.Instantiate(prefabEntity);
-                        LocalTransform itemLocalTransform = EntityManager.GetComponentData<LocalTransform>(itemEntity);
-                        itemLocalTransform.Position = targetPosition;
-                        EntityManager.SetComponentData(itemEntity, itemLocalTransform);
+                        if (recipe.Output == Resources.ResourceType.Score)
+                        {
+                            UnityEngine.Debug.Log("Player got one point for producing the final item");
+                            // TODO: increase player score
+                        }
+                        else
+                        {
+                            // Spawn item
+                            DynamicBuffer<ResourceItemPrefabElement> buffer = SystemAPI.GetBuffer<ResourceItemPrefabElement>(singleton);
+                            Entity prefabEntity = ResourceItemPrefab.Get(buffer, recipe.Output);
+                            var itemEntity = EntityManager.Instantiate(prefabEntity);
+                            LocalTransform itemLocalTransform = EntityManager.GetComponentData<LocalTransform>(itemEntity);
+                            itemLocalTransform.Position = targetPosition;
+                            EntityManager.SetComponentData(itemEntity, itemLocalTransform);
+                        }
 
                         EntityManager.SetComponentEnabled<BuildingProduction>(entity, false);
                     }

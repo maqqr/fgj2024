@@ -46,3 +46,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridCellPrefab: {fileID: 2416944779242051511, guid: 1e02394b1cabde64ca92922801b14cac,
     type: 3}
+  depositPrefab: {fileID: 5862158009185299581, guid: 18766a317d5cac04eb7fdd65bd87dc1b,
+    type: 3}

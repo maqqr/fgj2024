@@ -31,6 +31,12 @@ namespace DOTSInMars
                 //state.RequireForUpdate<execute>();
                 Entity gridPrefab = SystemAPI.GetSingleton<WorldGridCellAuthoring.GridSpawner>().GridCellPrefab;
 
+                {
+                    Entity depositEntity = EntityManager.Instantiate(SystemAPI.GetSingleton<WorldGridCellAuthoring.GridSpawner>().DepositPrefab);
+                    var transform = SystemAPI.GetComponentRW<LocalTransform>(depositEntity);
+                    transform.ValueRW.Position = new Vector3(0.5f, 0.0f, 0.5f);
+                }
+
                 for (int x = -worldSizeX / 2; x < worldSizeX / 2; x++)
                 {
                     for (int z = -worldSizeZ / 2; z < worldSizeZ / 2; z++)
