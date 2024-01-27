@@ -5,6 +5,7 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
+using UnityEditor.Build.Pipeline.Utilities;
 using UnityEngine;
 
 namespace DOTSInMars
@@ -21,7 +22,37 @@ namespace DOTSInMars
                 items.Add(WorldGridUtils.ToGridPosition(localTransform.Position), entity);
             }).WithAll<ResourceItem>().Run();
 
-            // TODO eat items nearby
+            // Make inputs eat items
+            Entities.ForEach((ref Building building, in LocalTransform localTransform) => {
+                Recipe recipe = Recipes.Get(building.Recipe);
+
+                // Make sure contained items list is the same length as recipe inputs
+                while (building.ContainedItems.Length < recipe.Inputs.Length)
+                    building.ContainedItems.Add(0);
+
+                for (int i = 0; i < recipe.Inputs.Length; i++)
+                {
+                    int3 eatPosition = WorldGridUtils.ToGridPosition(localTransform.Position + localTransform.TransformDirection(building.InputOffsets[i]));
+                    if (items.TryGetValue(eatPosition, out Entity itemEntity))
+                    {
+                        if (EntityManager.HasComponent<ResourceItem>(itemEntity))
+                        {
+                            ResourceItem item = EntityManager.GetComponentData<ResourceItem>(itemEntity);
+                            if (item.Value == recipe.Inputs[i].ResourceType && building.ContainedItems[i] < recipe.Inputs[i].Amount)
+                            {
+                                building.ContainedItems[i]++;
+
+                                DynamicBuffer<Child> buffer = EntityManager.GetBuffer<Child>(itemEntity);
+                                foreach (Child child in buffer)
+                                {
+                                    EntityManager.DestroyEntity(child.Value);
+                                }
+                                EntityManager.DestroyEntity(itemEntity);
+                            }
+                        }
+                    }
+                }
+            }).WithNone<BuildingPreviewTag>().WithStructuralChanges().WithoutBurst().Run();
 
             // Start item production
             Entities.ForEach((Entity entity, ref Building building, in LocalTransform localTransform) => {
@@ -30,7 +61,7 @@ namespace DOTSInMars
                 bool hasRequiredItemsInside = true;
                 for (int i = 0; i < recipe.Inputs.Length; i++)
                 {
-                    if (i >= building.ContainedItems.Length || building.ContainedItems[i] < recipe.Inputs[i].Amount)
+                    if (building.ContainedItems[i] < recipe.Inputs[i].Amount)
                         hasRequiredItemsInside = false;
                 }
                 if (hasRequiredItemsInside)
