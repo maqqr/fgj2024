@@ -36,7 +36,7 @@ namespace DOTSInMars
                 conveyedItem.Progress = math.min(1.0f, conveyedItem.Progress + SystemAPI.Time.DeltaTime);
 
                 float3 movement = WorldGridUtils.FromGridPosition(conveyedItem.TargetPosition - conveyedItem.StartPosition) * conveyedItem.Progress;
-                localTransform.Position = new float3(0.5f, 0.4f, 0.5f) + WorldGridUtils.FromGridPosition(conveyedItem.StartPosition) + movement;
+                localTransform.Position = new float3(0.5f, 1.0f, 0.5f) + WorldGridUtils.FromGridPosition(conveyedItem.StartPosition) + movement;
             }).Run();
 
             // Put items on conveyors if possible
