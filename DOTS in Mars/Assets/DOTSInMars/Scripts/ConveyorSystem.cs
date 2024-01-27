@@ -22,7 +22,7 @@ public partial class ConveyorSystem : SystemBase
 
         Entities.ForEach((Entity entity, in ConveyedItem conveyedItem) => {
             conveyedItems.Add(conveyedItem.TargetPosition, entity);
-        }).WithAll<Item>().Run();
+        }).WithAll<ResourceItem>().Run();
 
         Entities.ForEach((Entity entity, in LocalTransform localTransform) => {
             conveyors.Add(WorldGridUtils.ToGridPosition(localTransform.Position), entity);
@@ -51,7 +51,7 @@ public partial class ConveyorSystem : SystemBase
                     conveyedItems.Add(gridPosition, entity);
                 }
             }
-        }).WithAll<Item>().WithNone<ConveyedItem>().Run();
+        }).WithAll<ResourceItem>().WithNone<ConveyedItem>().Run();
 
         // Pass items onto next conveyor if movement has completed
         Entities.ForEach((Entity entity, ref ConveyedItem conveyedItem) => {
