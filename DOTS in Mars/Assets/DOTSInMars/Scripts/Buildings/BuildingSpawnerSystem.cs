@@ -17,11 +17,22 @@ namespace DOTSInMars.Buildings
 {
     public partial class BuildingSpawnerSystem : SystemBase
     {
-        private List<(float3, Entity)> _spawns = new List<(float3, Entity)> ();
+        private class BuildingPreview
+        {
+            public float3 Position;
+            public Entity Prefab;
+            public quaternion Rotation;
+
+            public BuildingPreview(float3 float3, Entity miner, quaternion rotation)
+            {
+                Position = float3;
+                Prefab = miner;
+                Rotation = rotation;
+            }
+        }
+
+        private BuildingPreview _spawn;
         private Camera _camera;
-        private BuildPhysicsWorld _buildPhysicsWorld;
-        private CollisionWorld _collisionWorld;
-        private bool _raycasting;
         private bool _raycastRequested;
 
         public event Action BuildingSet;
@@ -29,7 +40,7 @@ namespace DOTSInMars.Buildings
         internal void RegisterMinerForAdding(float3 screenPosition)
         {
             UnityEngine.Debug.Log($"Raycasting at {screenPosition}");
-            
+
         }
 
         protected override void OnUpdate()
@@ -39,32 +50,60 @@ namespace DOTSInMars.Buildings
                 _camera = Camera.main;
             }
 
-            if (_raycasting && Input.GetMouseButtonUp(0))
+            if (_spawn != null)
             {
                 HandleRaycasting();
+
+                if (Input.GetKeyUp(KeyCode.R))
+                {
+                    //ROTATES BY RADIANS!.?!!
+                    _spawn.Rotation = math.mul(quaternion.RotateY(1.5708f), _spawn.Rotation);
+                }
+
+                if (Input.GetMouseButtonDown(0))
+                {
+                    BuildingSet?.Invoke();
+
+                    SpawnBuildings();
+                    _spawn = null;
+
+                    var previewEntity = SystemAPI.GetSingletonEntity<BuildingPreviewTag>();
+                    EntityManager.DestroyEntity(previewEntity);
+                }
             }
 
-            if (_spawns.Count > 0)
+            //TODO: dont use _spawn
+            Entities.ForEach((ref LocalTransform trans, in BuildingPreviewTag preview) =>
             {
-                SpawnBuildings();
-            }
+                trans.Position = _spawn.Position;
+                trans.Rotation = _spawn.Rotation;
+
+            }).WithoutBurst().Run();
+
+
             if (_raycastRequested)
             {
-                _raycasting = true;
+                var entity = SystemAPI.GetSingletonEntity<BuildingCatalog>();
+                var data = EntityManager.GetComponentData<BuildingCatalog>(entity);
+
+                _spawn = new(new float3(0, 0.5f, 0), data.Miner, quaternion.identity);
+
+                var spawnedEntity = SpawnBuildings();
+                //TODO: add material that is transparent etc.
+                EntityManager.AddComponent<BuildingPreviewTag>(spawnedEntity);
+
                 _raycastRequested = false;
             }
         }
 
-        private void SpawnBuildings()
+        private Entity SpawnBuildings()
         {
-            for (int i = 0; i < _spawns.Count; i++)
-            {
-                var (position, prefab) = _spawns[i];
-                var newMiner = EntityManager.Instantiate(prefab);
-                var rwTrans = SystemAPI.GetComponentRW<LocalTransform>(newMiner);
-                rwTrans.ValueRW.Position = position;
-            }
-            _spawns.Clear();
+            var newMiner = EntityManager.Instantiate(_spawn.Prefab);
+            var rwTrans = SystemAPI.GetComponentRW<LocalTransform>(newMiner);
+            rwTrans.ValueRW.Position = _spawn.Position;
+            rwTrans.ValueRW.Rotation = _spawn.Rotation;
+
+            return newMiner;
         }
 
         private void HandleRaycasting()
@@ -76,23 +115,19 @@ namespace DOTSInMars.Buildings
 
             if (!Raycast(rayStart, rayEnd, out Unity.Physics.RaycastHit hit))
             {
-                UnityEngine.Debug.Log($"No hit");
                 return;
             }
-            UnityEngine.Debug.Log($"Hit at {hit}");
+            if (!EntityManager.HasComponent<WorldGridCell>(hit.Entity))
+            {
+                return;
+            }
             var grid = EntityManager.GetComponentData<WorldGridCell>(hit.Entity);
             if (grid.Blocked)
             {
                 //TODO: some red and error sounds
                 return;
             }
-
-            var entity = SystemAPI.GetSingletonEntity<BuildingCatalog>();
-            var data = EntityManager.GetComponentData<BuildingCatalog>(entity);
-
-            _spawns.Add(new(new float3(grid.Coordinates.x, 0.5f, grid.Coordinates.z), data.Miner));
-            _raycasting = false;
-            BuildingSet?.Invoke();
+            _spawn.Position = new float3(grid.Coordinates.x, 0.5f, grid.Coordinates.z);
         }
 
 
