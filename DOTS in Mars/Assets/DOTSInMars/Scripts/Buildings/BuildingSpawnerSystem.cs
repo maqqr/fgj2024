@@ -56,6 +56,11 @@ namespace DOTSInMars.Buildings
             {
                 HandleRaycasting();
 
+                if (Input.GetKeyUp(KeyCode.E))
+                {
+                    //ROTATES BY RADIANS!.?!!
+                    _spawn.Rotation = math.mul(quaternion.RotateY(-1.5708f), _spawn.Rotation);
+                }
                 if (Input.GetKeyUp(KeyCode.R))
                 {
                     //ROTATES BY RADIANS!.?!!
@@ -67,12 +72,16 @@ namespace DOTSInMars.Buildings
                 {
                     BuildingSet?.Invoke();
 
+                    var shifted = Input.GetKey(KeyCode.LeftShift);
                     SpawnBuildings();
-                    _spawn = null;
                     _onclick = false;
+                    if (!shifted)
+                    {
+                        _spawn = null;
 
-                    var previewEntity = SystemAPI.GetSingletonEntity<BuildingPreviewTag>();
-                    EntityManager.DestroyEntity(previewEntity);
+                        var previewEntity = SystemAPI.GetSingletonEntity<BuildingPreviewTag>();
+                        EntityManager.DestroyEntity(previewEntity);
+                    }
                 }
             }
 
