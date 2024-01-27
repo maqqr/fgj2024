@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Rendering;
 
 namespace DOTSInMars
 {
@@ -16,5 +17,11 @@ namespace DOTSInMars
         {
             return new float3(Coordinates.x + 0.5f, Coordinates.y - 0.5f, Coordinates.z + 0.5f);
         }
+    }
+
+    [MaterialProperty("_MainColor")]
+    public struct GridColor : IComponentData
+    {
+        public float4 Value;
     }
 }

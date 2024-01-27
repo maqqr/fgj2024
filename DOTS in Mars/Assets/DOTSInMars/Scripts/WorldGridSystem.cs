@@ -16,7 +16,7 @@ namespace DOTSInMars
     {
         const int worldSizeX = 100;
         const int worldSizeZ = 100;
-        float4 groundColor = new float4(0.7264151f, 0.5234901f, 0.4008988f, 1.0f);
+        float4 groundColor = new float4(1);
         private bool initialized;
 
         protected override void OnCreate()
@@ -54,8 +54,8 @@ namespace DOTSInMars
                         }
 
 
-                        EntityManager.AddComponent<URPMaterialPropertyBaseColor>(entity);
-                        var entityColor = SystemAPI.GetComponentRW<URPMaterialPropertyBaseColor>(entity);
+                        EntityManager.AddComponent<GridColor>(entity);
+                        var entityColor = SystemAPI.GetComponentRW<GridColor>(entity);
                         bool isEvenTile = (x + z) % 2 == 0;
                         float tintValue = isEvenTile ? 1.0f : 0.7f;
                         float4 finalColor = obstacle ? new float4(1, 0, 0, 1) * tintValue : groundColor * tintValue;
@@ -80,7 +80,7 @@ namespace DOTSInMars
             if (EntityManager.HasComponent<Obstacle>(hit.Entity))
             {
                 //Debug.Log(hit.Position);
-                if (hit.Position.y - 0.3f < cellCoordinate.y)
+                if (hit.Position.y - 0.6f < cellCoordinate.y)
                 {
                     return false;
                 }
