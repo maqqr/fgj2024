@@ -139,7 +139,7 @@ namespace DOTSInMars.Buildings
                 //TODO: some red and error sounds
                 return;
             }
-            _spawn.Position = new float3(grid.Coordinates.x, 0.5f, grid.Coordinates.z);
+            _spawn.Position = new float3(grid.Coordinates.x + 0.5f, 0.0f, grid.Coordinates.z + 0.5f);
         }
 
 
