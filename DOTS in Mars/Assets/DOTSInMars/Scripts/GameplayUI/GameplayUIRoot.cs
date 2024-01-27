@@ -1,7 +1,9 @@
 using DOTSInMars.Buildings;
+using DOTSInMars.Narrator;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
@@ -17,6 +19,8 @@ namespace DOTSInMars.UI
         [SerializeField] private BuildingButton _refineryButton;
         [SerializeField] private BuildingButton _manufacturerButton;
         [SerializeField] private BuildingButton _conveyorButton;
+        [SerializeField] private TextMeshProUGUI _displayText;
+        [SerializeField] private NarratorBehaviour _narrator;
 
         private BuildingSystem _buildingSystem;
         private BuildingSpawnerSystem _spawner;
@@ -112,6 +116,12 @@ namespace DOTSInMars.UI
         {
             // TODO: increase player score and display it
             UnityEngine.Debug.Log("Player got one point for producing the final item");
+        }
+
+        private void HandleSentenceShowing(string text)
+        {
+            _displayText.text = text;
+            _narrator.Announce(text);
         }
     }
 
