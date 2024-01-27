@@ -48,3 +48,5 @@ MonoBehaviour:
     type: 3}
   depositPrefab: {fileID: 5862158009185299581, guid: 18766a317d5cac04eb7fdd65bd87dc1b,
     type: 3}
+  gridHiglighterPrefab: {fileID: 4429460119517647408, guid: a69c9650297237e4a87725ca49f85a55,
+    type: 3}

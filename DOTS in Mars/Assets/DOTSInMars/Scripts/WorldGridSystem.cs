@@ -56,7 +56,10 @@ namespace DOTSInMars
 
                         EntityManager.AddComponent<GridColor>(entity);
                         var entityColor = SystemAPI.GetComponentRW<GridColor>(entity);
-                        bool isEvenTile = (x + z) % 2 == 0;
+
+                        // left this here if we want to revisit tiling
+                        //bool isEvenTile = (x + z) % 2 == 0;
+                        bool isEvenTile = true;
                         float tintValue = isEvenTile ? 1.0f : 0.7f;
                         float4 finalColor = obstacle ? new float4(1, 0, 0, 1) * tintValue : groundColor * tintValue;
                         entityColor.ValueRW.Value = finalColor;

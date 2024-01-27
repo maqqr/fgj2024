@@ -11,6 +11,7 @@ namespace DOTSInMars
     {
         [SerializeField] private GameObject gridCellPrefab;
         [SerializeField] private GameObject depositPrefab;
+        [SerializeField] private GameObject gridHiglighterPrefab;
         class WorldGridCellBaker : Baker<WorldGridCellAuthoring>
         {
             public override void Bake(WorldGridCellAuthoring authoring)
@@ -20,6 +21,7 @@ namespace DOTSInMars
                 {
                     GridCellPrefab = GetEntity(authoring.gridCellPrefab, TransformUsageFlags.None),
                     DepositPrefab = GetEntity(authoring.depositPrefab, TransformUsageFlags.None),
+                    GridHighlighterPrefab = GetEntity(authoring.gridHiglighterPrefab, TransformUsageFlags.None),
                 });
             }
         }
@@ -27,6 +29,7 @@ namespace DOTSInMars
         {
             public Entity GridCellPrefab;
             public Entity DepositPrefab;
+            public Entity GridHighlighterPrefab;
         }
     }
 }
