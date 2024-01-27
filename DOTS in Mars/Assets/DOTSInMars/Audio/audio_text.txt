@@ -18,3 +18,7 @@
 "Any slower and we'll have to measure your progress with a calendar. Come on, chop-chop! We don't have all day - or do we? I mean, time is a construct, after all."
 "Oh, take your time. It's not like we're on a different planet with limited resources and a harsh, lifeless environment or anything. No pressure."
 "You know, they say insanity is doing the same thing over and over and expecting different results. But hey, who am I to judge your unique strategy?"
+
+"Wow, you actually shipped a product? I had a bet going that you'd accidentally ship a box of Martian rocks first. Guess I owe Jerry five bucks."
+"Congratulations! You've successfully shipped something that might, just might, not get returned with a complaint note written in tears of disappointment."
+"I see you've managed to ship a product without turning the factory into a fireworks show. I'm not sure if I should be proud or disappointed at the lack of explosions."
