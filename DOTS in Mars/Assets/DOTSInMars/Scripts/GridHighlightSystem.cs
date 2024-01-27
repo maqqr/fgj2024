@@ -17,26 +17,11 @@ namespace DOTSInMars
 {
     public partial class GridHighlightSystem : SystemBase
     {
-        private class HighlightBlock
-        {
-            public float3 Position;
-            public Entity Prefab;
-
-            public HighlightBlock(float3 float3, Entity miner, quaternion rotation)
-            {
-                Position = float3;
-                Prefab = miner;
-            }
-        }
 
         private Camera _camera;
-        private bool _raycastRequested;
         private bool _initialized;
-
         const float highlighterOffset = 1f;
-
         private Entity mainHighlighter;
-
         private FixedList512Bytes<Entity> secondaryHighlighters;
 
 
@@ -70,7 +55,6 @@ namespace DOTSInMars
             mainHighlighter = EntityManager.Instantiate(highlighterPrefab);
             EntityManager.AddComponent<GridHighlight>(mainHighlighter);
             InstantiateHighlightHelpers();
-            //Debug.Log("Highlighter init");
             _initialized = true;
         }
 
@@ -122,7 +106,7 @@ namespace DOTSInMars
         private void InstantiateHighlightHelpers()
         {
             var singleton = SystemAPI.GetSingleton<WorldGridCellAuthoring.GridSpawner>();
-            Entity highlighterPrefab = singleton.GridHighlighterPrefab;
+            Entity highlighterPrefab = singleton.GridSecondaryHighlighterPrefab;
             FixedList512Bytes<Entity> secondaries = new FixedList512Bytes<Entity>();
             for (int x = 0; x < singleton.SecondaryHighlightersXLength; x++)
             {
@@ -138,19 +122,13 @@ namespace DOTSInMars
                         var highLightComponent = SystemAPI.GetComponentRW<GridHighlight>(highlightEntity);
                         float xOffset = (float)x - (float)singleton.SecondaryHighlightersXLength / 2 + 0.5f;
                         float zOffset = (float)y - (float)singleton.SecondaryHighlightersYLength / 2 + 0.5f;
-                        Debug.Log(x + " | " + y + " | " + xOffset + " | " + zOffset + " | " + singleton.SecondaryHighlightersXLength + " | " + singleton.SecondaryHighlightersYLength);
                         highLightComponent.ValueRW.Offset = new float3(xOffset, 0, zOffset);
                         secondaries.Add(highlightEntity);
-                        //Debug.Log("add secondary " + highLightComponent.ValueRW.Offset);
                     }
                 }
             }
             secondaryHighlighters = secondaries; // a bit useless step
         }
 
-        // this is pretty stupid, but guess it works
-        private void AdjustSecondaryHighlighters(float3 targetCenter)
-        {
-        }
     }
 }

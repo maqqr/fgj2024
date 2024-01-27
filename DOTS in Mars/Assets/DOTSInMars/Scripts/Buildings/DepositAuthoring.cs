@@ -23,16 +23,16 @@ namespace DOTSInMars.Buildings
                     OutputOffset = new float3(0.0f, 0.0f, 0.0f),
                 };
                 building.InputOffsets.Add(new float3(-2.0f, 0.0f, -1.0f));
-                building.InputOffsets.Add(new float3(-2.0f, 0.0f, 1.0f));
+                building.InputOffsets.Add(new float3(-2.0f, 0.0f, 2.0f));
 
-                building.InputOffsets.Add(new float3(2.0f, 0.0f, -1.0f));
-                building.InputOffsets.Add(new float3(2.0f, 0.0f, 1.0f));
+                building.InputOffsets.Add(new float3(3.0f, 0.0f, -1.0f));
+                building.InputOffsets.Add(new float3(3.0f, 0.0f, 2.0f));
 
-                building.InputOffsets.Add(new float3(-1.0f, 0.0f, 2.0f));
-                building.InputOffsets.Add(new float3(1.0f, 0.0f, 2.0f));
+                building.InputOffsets.Add(new float3(-1.0f, 0.0f, 3.0f));
+                building.InputOffsets.Add(new float3(2.0f, 0.0f, 3.0f));
 
                 building.InputOffsets.Add(new float3(-1.0f, 0.0f, -2.0f));
-                building.InputOffsets.Add(new float3(1.0f, 0.0f, -2.0f));
+                building.InputOffsets.Add(new float3(2.0f, 0.0f, -2.0f));
                 AddComponent(entity, building);
                 AddComponent(entity, new BuildingProduction());
                 SetComponentEnabled<BuildingProduction>(entity, false);

@@ -49,10 +49,6 @@ namespace DOTSInMars
                         transform.ValueRW.Position = new Vector3(x + 0.5f, -0.5f, z + 0.5f);
 
                         var obstacle = CheckForObstacles(cell.ValueRW);
-                        if (obstacle)
-                        {
-                        }
-
 
                         EntityManager.AddComponent<GridColor>(entity);
                         var entityColor = SystemAPI.GetComponentRW<GridColor>(entity);
