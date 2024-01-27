@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,19 +9,20 @@ using UnityEngine;
 
 namespace DOTSInMars.Buildings
 {
-    public class MinerAuthoring : MonoBehaviour
+    public class RefineryAuthoring : MonoBehaviour
     {
-        class MinerBaker : Baker<MinerAuthoring>
+        class RefineryBaker : Baker<RefineryAuthoring>
         {
-            public override void Bake(MinerAuthoring authoring)
+            public override void Bake(RefineryAuthoring authoring)
             {
                 var entity = GetEntity(TransformUsageFlags.None);
                 var building = new Building
                 {
-                    Type = BuildingType.Miner,
-                    Recipe = 0,
-                    OutputOffset = new float3(1.0f, 0.0f, 0.0f),
+                    Type = BuildingType.Refinery,
+                    Recipe = 1,
+                    OutputOffset = new float3(3.0f, 0.0f, 0.0f),
                 };
+                building.InputOffsets.Add(new float3(-3.0f, 0.0f, 0.0f));
                 AddComponent(entity, building);
                 AddComponent(entity, new BuildingProduction());
                 SetComponentEnabled<BuildingProduction>(entity, false);
