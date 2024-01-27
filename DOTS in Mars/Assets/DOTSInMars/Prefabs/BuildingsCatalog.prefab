@@ -45,3 +45,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _miner: {fileID: 6559139332908936420, guid: a63778f7bce969145bc031d0048bd1d5, type: 3}
+  _refinery: {fileID: 349827203523134016, guid: fc0e75413e6799245bd6b8a5b6930344,
+    type: 3}
+  _manufacturer: {fileID: 1818962543997524522, guid: edd9ce8fffa551b40970f93201a6b3ae,
+    type: 3}
+  _conveyor: {fileID: 6006719895855504145, guid: 2d0c76d8c505add438ab6fa496881e63,
+    type: 3}

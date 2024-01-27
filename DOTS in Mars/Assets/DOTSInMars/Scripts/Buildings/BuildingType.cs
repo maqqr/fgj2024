@@ -8,6 +8,9 @@ namespace DOTSInMars.Buildings
 {
     public enum BuildingType
     {
-        Miner
+        Miner,
+        Refinery,
+        Manufacturer,
+        Conveyor
     }
 }

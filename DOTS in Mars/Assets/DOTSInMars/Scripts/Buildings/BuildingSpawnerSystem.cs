@@ -34,6 +34,8 @@ namespace DOTSInMars.Buildings
         private BuildingPreview _spawn;
         private Camera _camera;
         private bool _raycastRequested;
+        private BuildingType _buildingType;
+        private bool _onclick;
 
         public event Action BuildingSet;
 
@@ -60,12 +62,14 @@ namespace DOTSInMars.Buildings
                     _spawn.Rotation = math.mul(quaternion.RotateY(1.5708f), _spawn.Rotation);
                 }
 
-                if (Input.GetMouseButtonDown(0))
+                //TODO: use UI click instead of this to allow for UI to take control from this
+                if (_onclick)
                 {
                     BuildingSet?.Invoke();
 
                     SpawnBuildings();
                     _spawn = null;
+                    _onclick = false;
 
                     var previewEntity = SystemAPI.GetSingletonEntity<BuildingPreviewTag>();
                     EntityManager.DestroyEntity(previewEntity);
@@ -86,7 +90,15 @@ namespace DOTSInMars.Buildings
                 var entity = SystemAPI.GetSingletonEntity<BuildingCatalog>();
                 var data = EntityManager.GetComponentData<BuildingCatalog>(entity);
 
-                _spawn = new(new float3(0, 0.5f, 0), data.Miner, quaternion.identity);
+                var prefab = _buildingType switch
+                {
+                    BuildingType.Miner => data.Miner,
+                    BuildingType.Refinery => data.Refinery,
+                    BuildingType.Manufacturer => data.Manufacturer,
+                    _ => data.Conveyor
+                };
+
+                _spawn = new(new float3(0, 0.5f, 0), prefab, quaternion.identity);
 
                 var spawnedEntity = SpawnBuildings();
                 //TODO: add material that is transparent etc.
@@ -152,9 +164,21 @@ namespace DOTSInMars.Buildings
             return collisionWorld.CastRay(raycastInput, out target);
         }
 
-        internal void RegisterRaycasting()
+        internal void RegisterRaycasting(BuildingType type)
         {
             _raycastRequested = true;
+            _buildingType = type;
+
+            if (_spawn != null)
+            {
+                var previewEntity = SystemAPI.GetSingletonEntity<BuildingPreviewTag>();
+                EntityManager.DestroyEntity(previewEntity);
+            }
+        }
+
+        internal void OnClick()
+        {
+            _onclick = true;
         }
     }
 }
