@@ -37,7 +37,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _CliffTopTexture:
-        m_Texture: {fileID: 2800000, guid: 053576e5173648a4695563cccbea48a0, type: 3}
+        m_Texture: {fileID: 2800000, guid: 7cbb3edc070897d4989f3e90c670c751, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -105,8 +105,8 @@ Material:
     - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
-    - _CliffTint: 1.22
-    - _CliffTopHeight: 0.05
+    - _CliffTint: 4.75
+    - _CliffTopHeight: -0.02
     - _Cull: 2
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
