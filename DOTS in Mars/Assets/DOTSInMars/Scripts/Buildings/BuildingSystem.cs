@@ -90,8 +90,22 @@ namespace DOTSInMars
                 if (hasRequiredItemsInside)
                 {
                     // Consume items
-                    for (int i = 0; i < recipe.Inputs.Length; i++)
-                        building.ContainedItems[i] -= recipe.Inputs[i].Amount;
+                    if (recipe.Output != Resources.ResourceType.Score)
+                    {
+                        for (int i = 0; i < recipe.Inputs.Length; i++)
+                            building.ContainedItems[i] -= recipe.Inputs[i].Amount;
+                    }
+                    else
+                    {
+                        for (int i = 0; i < recipe.Inputs.Length; i++)
+                        {
+                            if (building.ContainedItems[i] > 0)
+                            {
+                                building.ContainedItems[i]--;
+                                break;
+                            }
+                        }
+                    }
 
                     // Start production
                     EntityManager.SetComponentEnabled<BuildingProduction>(entity, true);
