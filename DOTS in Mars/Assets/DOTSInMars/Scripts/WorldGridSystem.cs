@@ -55,9 +55,12 @@ namespace DOTSInMars
 
                         // left this here if we want to revisit tiling
                         //bool isEvenTile = (x + z) % 2 == 0;
+                        
                         bool isEvenTile = true;
                         float tintValue = isEvenTile ? 1.0f : 0.7f;
-                        float4 finalColor = obstacle ? new float4(1, 0, 0, 1) * tintValue : groundColor * tintValue;
+                        //float4 finalColor = obstacle ? new float4(1, 0, 0, 1) * tintValue : groundColor * tintValue;
+                        // no use for now
+                        float4 finalColor = groundColor;
                         entityColor.ValueRW.Value = finalColor;
                     }
                 }
