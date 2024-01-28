@@ -57,7 +57,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GroundTexture:
-        m_Texture: {fileID: 2800000, guid: 6030ff0ad7008204f94167e9faa43519, type: 3}
+        m_Texture: {fileID: 2800000, guid: 7cbb3edc070897d4989f3e90c670c751, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GroundTexture2:
+        m_Texture: {fileID: 2800000, guid: b99a59e5d288ae340bccec48408e45bb, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -131,6 +135,7 @@ Material:
     - _BaseColor: {r: 0.7264151, g: 0.52349013, b: 0.4008989, a: 1}
     - _Color: {r: 0.7264151, g: 0.5234901, b: 0.40089884, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _MainColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &1814640705382295158
