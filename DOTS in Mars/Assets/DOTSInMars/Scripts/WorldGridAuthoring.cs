@@ -14,6 +14,7 @@ namespace DOTSInMars
         [SerializeField] private GameObject gridCellPrefab;
         [SerializeField] private GameObject depositPrefab;
         [SerializeField] private GameObject gridHiglighterPrefab;
+        [SerializeField] private GameObject gridSecondaryHiglighterPrefab;
         [SerializeField] private Array2DBool secondaryHighlighterPositions;
         class WorldGridCellBaker : Baker<WorldGridCellAuthoring>
         {
@@ -36,6 +37,7 @@ namespace DOTSInMars
                     GridCellPrefab = GetEntity(authoring.gridCellPrefab, TransformUsageFlags.None),
                     DepositPrefab = GetEntity(authoring.depositPrefab, TransformUsageFlags.None),
                     GridHighlighterPrefab = GetEntity(authoring.gridHiglighterPrefab, TransformUsageFlags.None),
+                    GridSecondaryHighlighterPrefab = GetEntity(authoring.gridSecondaryHiglighterPrefab, TransformUsageFlags.None),
                     SecondaryHighlighterPositions = highlighterPositions,
                     SecondaryHighlightersXLength = authoring.secondaryHighlighterPositions.GridSize.x,
                     SecondaryHighlightersYLength = authoring.secondaryHighlighterPositions.GridSize.y
@@ -47,6 +49,7 @@ namespace DOTSInMars
             public Entity GridCellPrefab;
             public Entity DepositPrefab;
             public Entity GridHighlighterPrefab;
+            public Entity GridSecondaryHighlighterPrefab;
             public FixedList512Bytes<bool> SecondaryHighlighterPositions;
             public int SecondaryHighlightersXLength;
             public int SecondaryHighlightersYLength;

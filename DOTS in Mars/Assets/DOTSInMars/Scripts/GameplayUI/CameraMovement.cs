@@ -9,7 +9,7 @@ namespace DOTSInMars
         [SerializeField] private float _movementSpeed = 5;
         [SerializeField] private float _zoomSpeed = 5;
         [SerializeField] private float _yMaxZoom = 15;
-        [SerializeField] private float _yMinZoom = 2;
+        [SerializeField] private float _yMinZoom = 0;
         [SerializeField] private Transform _camera;
 
         void Update()

@@ -43,6 +43,7 @@ namespace DOTSInMars.Buildings
 
         public event Action<BuildingType> PlayerIdlesWithBuilding;
         public event Action<BuildingType> BuildingSet;
+        public event Action<BuildingType> BuildingPlacementDone;
 
 
         protected override void OnUpdate()
@@ -92,7 +93,7 @@ namespace DOTSInMars.Buildings
                         var grid = EntityManager.GetComponentData<WorldGridCell>(foundGridEntity);
                         grid.Blocked = true;
                         EntityManager.SetComponentData(foundGridEntity, grid);
-
+                        BuildingSet?.Invoke(_buildingType);
                         _placeable = false;
                        
                         if (!shifted)
@@ -100,7 +101,7 @@ namespace DOTSInMars.Buildings
                             _spawn = null;
                             var previewEntity = SystemAPI.GetSingletonEntity<BuildingPreviewTag>();
                             EntityManager.DestroyEntity(previewEntity);
-                            BuildingSet?.Invoke(_buildingType);
+                            BuildingPlacementDone?.Invoke(_buildingType);
                         }
                     }
                 }

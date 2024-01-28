@@ -45,18 +45,69 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _narrations:
-  - Text: "Hyv\xE4 homma!"
+  - Text: 
     AudioClip: {fileID: 8300000, guid: 1b07d2673b41da54193eb7c7500911d7, type: 3}
-    Type: 1
-  - Text: Manu valmis
-    AudioClip: {fileID: 8300000, guid: 8aeec461b89595240bf7c914a3222ed7, type: 3}
-    Type: 1
-  - Text: "Hyv\xE4!"
-    AudioClip: {fileID: 8300000, guid: 2a87b3f48559b814c8af4bc6eb0e0e59, type: 3}
     Type: 3
   - Text: 
+    AudioClip: {fileID: 8300000, guid: 8aeec461b89595240bf7c914a3222ed7, type: 3}
+    Type: 3
+  - Text: "Hyv\xE4!"
+    AudioClip: {fileID: 8300000, guid: 2a87b3f48559b814c8af4bc6eb0e0e59, type: 3}
+    Type: 13
+  - Text: 
     AudioClip: {fileID: 8300000, guid: 3b7cf087d08204348a14cdb48c01dc6b, type: 3}
-    Type: 6
+    Type: 1
   - Text: 
     AudioClip: {fileID: 8300000, guid: c1083f0731dc5c748b8e18d4ea390c56, type: 3}
     Type: 5
+  - Text: 
+    AudioClip: {fileID: 8300000, guid: 8f7cc20961de9d74f909e3437de04111, type: 3}
+    Type: 7
+  - Text: 
+    AudioClip: {fileID: 8300000, guid: 8d50305ca318c654b82c09af3877c336, type: 3}
+    Type: 7
+  - Text: 
+    AudioClip: {fileID: 8300000, guid: 7f1be1154d934c943a04eda570b2de62, type: 3}
+    Type: 6
+  - Text: 
+    AudioClip: {fileID: 8300000, guid: 30b17d1777952874ba5ca8598554763a, type: 3}
+    Type: 6
+  - Text: 
+    AudioClip: {fileID: 8300000, guid: c65d278f49f57ae4e813651f56383f4d, type: 3}
+    Type: 13
+  - Text: 
+    AudioClip: {fileID: 8300000, guid: ca7d9772c8e9fdd4d9b6503516946bbc, type: 3}
+    Type: 13
+  - Text: 
+    AudioClip: {fileID: 8300000, guid: bbaa647a9f2fe2f42a7c2019d80f88dc, type: 3}
+    Type: 13
+  - Text: 
+    AudioClip: {fileID: 8300000, guid: 8aeec461b89595240bf7c914a3222ed7, type: 3}
+    Type: 2
+  - Text: 
+    AudioClip: {fileID: 8300000, guid: ebc4ad5d4bab2b54db1128f58cb50dc4, type: 3}
+    Type: 2
+  - Text: 
+    AudioClip: {fileID: 8300000, guid: c00f15d2308d0914993511a2a71ec4a1, type: 3}
+    Type: 8
+  - Text: 
+    AudioClip: {fileID: 8300000, guid: 2d8a9a4415f3f4d4b9a0ead476bccac9, type: 3}
+    Type: 10
+  - Text: 
+    AudioClip: {fileID: 8300000, guid: d75e53349b835644e88dd9ff3fa7f621, type: 3}
+    Type: 9
+  - Text: 
+    AudioClip: {fileID: 8300000, guid: 82150f5af814128468ab8bc7b02deae1, type: 3}
+    Type: 10
+  - Text: 
+    AudioClip: {fileID: 8300000, guid: 19ed661199620b645aa1f33b036e1588, type: 3}
+    Type: 4
+  - Text: 
+    AudioClip: {fileID: 8300000, guid: 82150f5af814128468ab8bc7b02deae1, type: 3}
+    Type: 10
+  - Text: 
+    AudioClip: {fileID: 8300000, guid: a4a1cd5813e60af4ea9f5de7f28fe4ed, type: 3}
+    Type: 4
+  - Text: 
+    AudioClip: {fileID: 8300000, guid: e290e1a1c495d94499cc7774ed8fe835, type: 3}
+    Type: 15
