@@ -20,7 +20,7 @@ namespace DOTSInMars
             var items = new NativeHashMap<int3, Entity>(100, Allocator.Temp);
 
             Entities.ForEach((Entity entity, in LocalTransform localTransform) => {
-                items.Add(WorldGridUtils.ToGridPosition(localTransform.Position), entity);
+                items.TryAdd(WorldGridUtils.ToGridPosition(localTransform.Position), entity);
             }).WithAll<ResourceItem>().Run();
 
             // Make inputs eat items
