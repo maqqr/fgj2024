@@ -938,6 +938,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: MineButton
       objectReference: {fileID: 0}
+    - target: {fileID: 2417275215040969272, guid: f87cf6e102986ad4ab8e5d21e89a373b,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 8389352743e6c344790ee0e2900fa586,
+        type: 3}
     - target: {fileID: 2887034605143852325, guid: f87cf6e102986ad4ab8e5d21e89a373b,
         type: 3}
       propertyPath: m_IsActive
@@ -982,6 +988,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 4240816050647313523, guid: f87cf6e102986ad4ab8e5d21e89a373b,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4240816050647313523, guid: f87cf6e102986ad4ab8e5d21e89a373b,
         type: 3}
@@ -1084,6 +1095,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: RefineryButton
       objectReference: {fileID: 0}
+    - target: {fileID: 2417275215040969272, guid: f87cf6e102986ad4ab8e5d21e89a373b,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 34487b629390ce949adf94fe5ac1b847,
+        type: 3}
     - target: {fileID: 2887034605143852325, guid: f87cf6e102986ad4ab8e5d21e89a373b,
         type: 3}
       propertyPath: m_IsActive
@@ -1128,6 +1145,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 4240816050647313523, guid: f87cf6e102986ad4ab8e5d21e89a373b,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4240816050647313523, guid: f87cf6e102986ad4ab8e5d21e89a373b,
         type: 3}
@@ -1230,6 +1252,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: ManufacturerButton
       objectReference: {fileID: 0}
+    - target: {fileID: 2417275215040969272, guid: f87cf6e102986ad4ab8e5d21e89a373b,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e65d31a565d687b4e9f53ec55eec48c8,
+        type: 3}
     - target: {fileID: 2887034605143852325, guid: f87cf6e102986ad4ab8e5d21e89a373b,
         type: 3}
       propertyPath: m_IsActive
@@ -1274,6 +1302,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 4240816050647313523, guid: f87cf6e102986ad4ab8e5d21e89a373b,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4240816050647313523, guid: f87cf6e102986ad4ab8e5d21e89a373b,
         type: 3}
@@ -1376,6 +1409,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: ConveyorButton
       objectReference: {fileID: 0}
+    - target: {fileID: 2417275215040969272, guid: f87cf6e102986ad4ab8e5d21e89a373b,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 2a2bf395207beca4ca736cae375796b0,
+        type: 3}
     - target: {fileID: 2887034605143852325, guid: f87cf6e102986ad4ab8e5d21e89a373b,
         type: 3}
       propertyPath: m_IsActive
@@ -1420,6 +1459,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 4240816050647313523, guid: f87cf6e102986ad4ab8e5d21e89a373b,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4240816050647313523, guid: f87cf6e102986ad4ab8e5d21e89a373b,
         type: 3}
